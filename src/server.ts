@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import http from "http";
 import userRoutes from "./routes/user.route.js";
 import { connectDatabase } from "./config/db.config.js";
@@ -10,12 +10,21 @@ const DB_URI = "mongodb://localhost:27017/JobSeeker";
 const app = express();
 app.use(express.json());
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome to website");
 });
 app.use("/users", userRoutes);
 
 connectDatabase(DB_URI);
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const error: any = new Error(`cannot get ${req.method} on ${req.path}`);
+  error.statusCode = 404;
+  error.status = "fail";
+  error.success = false;
+  next(error);
+});
+
 app.use(errorHandler);
 
 const server = http.createServer(app);
