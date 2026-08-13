@@ -5,7 +5,7 @@ enum Role {
   USER = "USER",
 }
 
-interface TUserDocument {
+interface TUserDocument extends Document {
   fullName: string;
   email: string;
   password: string;

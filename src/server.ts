@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import http from "http";
 import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.routes.js";
 import { connectDatabase } from "./config/db.config.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to website");
 });
 app.use("/users", userRoutes);
+// app.use("/v2/auth", authRoutes);
+app.use("/v1/auth", authRoutes);
 
 connectDatabase(DB_URI);
 
