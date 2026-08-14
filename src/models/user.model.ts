@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema<TUserDocument>(
     password: {
       type: String,
       required: [true, "full_name is required"],
+      select: false,
     },
     role: {
       type: String,
