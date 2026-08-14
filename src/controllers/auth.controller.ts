@@ -81,4 +81,32 @@ export const login = async (
 };
 //get profile
 // change password
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email, password, new_password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      throw new AppError("User not found", 400);
+    }
+    if (!email) throw new AppError("email is required", 400);
+    if (!password) throw new AppError("password is required", 400);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
+      user.password = await hashPassword(new_password);
+    }
+    await user.save();
+    res.status(201).json({
+      message: "New password added",
+      data: user,
+      success: true,
+      status: "success",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 //forgot password
