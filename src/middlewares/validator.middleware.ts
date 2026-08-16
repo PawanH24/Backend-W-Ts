@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodObject } from "zod";
+import AppError from "../utils/appError.utils";
 
 export const validate = (schema: ZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -16,7 +17,10 @@ export const validate = (schema: ZodObject) => {
       next();
     } else {
       console.log(result.error);
-      next(result.error);
+      const error = result.error.issues.map(({ path, message }) => {
+        return { path: path.join("."), message };
+      });
+      next(new AppError("validation error", 400, error));
     }
   };
 };

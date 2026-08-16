@@ -16,6 +16,7 @@ export const errorHandler = (
     status,
     success,
     data: null,
+    details: error?.details ?? null,
     stack: error?.stack ?? null,
   });
 };
