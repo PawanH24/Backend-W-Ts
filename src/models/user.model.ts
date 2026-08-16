@@ -3,6 +3,7 @@ import mongoose, { Document } from "mongoose";
 enum Role {
   ADMIN = "ADMIN",
   USER = "USER",
+  HOST = "HOST",
 }
 
 interface TUserDocument extends Document {

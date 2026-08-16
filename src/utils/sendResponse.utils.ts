@@ -3,7 +3,7 @@ import { Response } from "express";
 interface IResponsedData<T> {
   message: string;
   statusCode: number;
-  data: any;
+  data: T;
 }
 
 export const sendResponse = <T>(

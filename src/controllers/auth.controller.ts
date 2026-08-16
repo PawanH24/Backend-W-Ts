@@ -23,7 +23,7 @@ export const register = catchAsync(async (req, res) => {
     error.success = false;
   }
   if (!password) {
-    const error: any = new Error("email required");
+    const error: any = new Error("password required");
     error.statusCode = 400;
     error.status = "fail";
     error.success = false;
