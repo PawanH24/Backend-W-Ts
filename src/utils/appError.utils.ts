@@ -4,7 +4,7 @@ class AppError extends Error {
   constructor(
     public message: string,
     public statusCode: number,
-    public detail: any[],
+    public detail?: any[],
   ) {
     super(message);
     this.statusCode = statusCode;
