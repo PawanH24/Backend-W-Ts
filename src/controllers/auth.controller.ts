@@ -16,89 +16,84 @@ export const register = catchAsync(async (req, res) => {
     //   error.success = false;
     throw new AppError("full_name is required", 400);
   }
-  if (!email) {
-    const error: any = new Error("email required");
-    error.statusCode = 400;
-    error.status = "fail";
-    error.success = false;
-  }
-  if (!password) {
-    const error: any = new Error("password required");
-    error.statusCode = 400;
-    error.status = "fail";
-    error.success = false;
-  }
+  if (!email) throw new AppError("email is required", 400);
 
+  if (!password) throw new AppError("password is required", 400);
+  const existingUser = await User.findOne({ email });
+  if (existingUser)
+    throw new AppError("User already exists with this email", 409);
+
+  const hashedPassword = await hashPassword(password);
   //user instance
-  const user = new User({ fullName, email, password, phone });
+  const user = new User({ fullName, email, password: hashedPassword, phone });
 
-  //hash password
-  const hash = await hashPassword(password);
-  user.password = hash;
   //upload profile image
-  //save user
+
   await user.save();
-  //success response
-  const { password: _, ...rest } = user.toObject();
+
+  const { password: _, ...userWithoutPassword } = user.toObject();
+
   sendResponse(res, {
     message: "registered succesfully",
     statusCode: 201,
-    data: rest,
+    data: userWithoutPassword,
   });
 });
 
 //login
 
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+export const login = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email) throw new AppError("email is required", 400);
     if (!password) throw new AppError("password is required", 400);
 
-    const user = await User.findOne({ email: email }).select("+password");
-    if (!user) throw new AppError("user not found", 500);
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) throw new AppError("Invalid email or password", 401);
 
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new AppError("Wrong password", 400);
+      throw new AppError("Wrong password", 401);
     }
+    const { password: _, ...userWithoutPassword } = user.toObject();
 
     // 3. If password is correct, send success
     // response
-    res.status(200).json({ message: "Logged In" });
-  } catch (error) {
-    next(error);
-  }
-};
+    sendResponse(res, {
+      message: "Logged in successfully",
+      statusCode: 200,
+      data: userWithoutPassword,
+    });
+  },
+);
 //get profile
 // change password
-export const changePassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+export const changePassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { email, password, new_password } = req.body;
-    const user = await User.findOne({ email: email }).select("+password");
-    if (!user) {
-      throw new AppError("User not found", 400);
-    }
+
     if (!email) throw new AppError("email is required", 400);
     if (!password) throw new AppError("password is required", 400);
+    if (!new_password) throw new AppError("new password is required", 400);
+    if (password === new_password)
+      throw new AppError(
+        "New password must be different from current password",
+        400,
+      );
+
+    const user = await User.findOne({ email: email }).select("+password");
+    if (!user) throw new AppError("User not found", 404);
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (isPasswordValid) {
-      user.password = await hashPassword(new_password);
-    }
+    if (!isPasswordValid) throw new AppError("Password incorrect", 401);
+    user.password = await hashPassword(new_password);
     await user.save();
-    const { password: _, ...rest } = user.toObject();
+
+    const { password: _, ...userWithoutPassword } = user.toObject();
     sendResponse(res, {
       message: "Changed Password successfully",
-      statusCode: 201,
-      data: rest,
+      statusCode: 200,
+      data: userWithoutPassword,
     });
     // res.status(201).json({
     //   message: "New password added",
@@ -106,8 +101,6 @@ export const changePassword = async (
     //   success: true,
     //   status: "success",
     // });
-  } catch (error) {
-    next(error);
-  }
-};
+  },
+);
 //forgot password

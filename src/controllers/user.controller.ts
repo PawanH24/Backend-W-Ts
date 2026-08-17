@@ -3,24 +3,24 @@ import User from "../models/user.model.js";
 import { catchAsync } from "../utils/catchAsync.utils.js";
 import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
-import mongoose from "mongoose";
 
-export const getAll = async (req: Request, res: Response) => {
-  try {
-    const users = await User.find({});
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+export const getAll = catchAsync(async (req: Request, res: Response) => {
+  const users = await User.find({}).select("-password");
+  res.status(200).json(users);
+  sendResponse(res, {
+    message: "Displaying all users",
+    statusCode: 200,
+    data: users,
+  });
+});
 
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = await User.findById(id);
-  if (!user) throw new AppError("user not found", 400);
+  const user = await User.findById(id).select("-password");
+  if (!user) throw new AppError("user not found", 404);
   sendResponse(res, {
     message: "user found successfully",
-    statusCode: 201,
+    statusCode: 200,
     data: user,
   });
 });
@@ -30,6 +30,12 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   const data = req.body;
   const user = await User.findByIdAndUpdate(id, data, {
     returnDocument: "after",
+  });
+  if (!user) throw new AppError("User not found", 400);
+  sendResponse(res, {
+    message: `${user.role} updated successfully`,
+    statusCode: 201,
+    data: user,
   });
 });
 
