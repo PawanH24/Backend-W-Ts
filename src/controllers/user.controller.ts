@@ -6,7 +6,6 @@ import { sendResponse } from "../utils/sendResponse.utils.js";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const users = await User.find({}).select("-password");
-  res.status(200).json(users);
   sendResponse(res, {
     message: "Displaying all users",
     statusCode: 200,
@@ -45,4 +44,9 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
   const user = await User.findByIdAndDelete(id);
 
   if (!user) throw new AppError("user not found", 400);
+  sendResponse(res, {
+    message: "User deleted successsfully",
+    statusCode: 200,
+    data: user,
+  });
 });

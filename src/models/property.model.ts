@@ -1,19 +1,12 @@
 import mongoose from "mongoose";
-
-enum PropertyType {
-  Apartment = "Apartment",
-  House = "House",
-  Banglow = "Banglow",
-}
+import { PropertyType, PriceType } from "../types/enum.types";
 
 interface TProperty {
   host: string;
   name: string;
   description: string;
-  price_type: {
-    amount: number;
-    rate_type: "per_hour" | "per_day" | "per_week" | "per_month";
-  }[];
+  price_type: PriceType;
+  amount: number;
   address: {
     country: string;
     city: string;
@@ -37,19 +30,16 @@ const propertySchema = new mongoose.Schema<TProperty>({
     type: String,
     trim: true,
   },
-  price_type: {
-    type: [
-      {
-        amount: { type: Number, required: true, min: 0 },
-        rate_type: {
-          type: String,
-          required: true,
-          enum: ["per_hour", "per_day", "per_week", "per_month"],
-        },
-      },
-    ],
+  amount: {
+    type: Number,
     required: true,
   },
+  price_type: {
+    type: String,
+    required: true,
+    enum: Object.values(PriceType),
+  },
+
   address: {
     type: {
       country: { type: String, required: true },

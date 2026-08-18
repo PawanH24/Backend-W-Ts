@@ -4,7 +4,7 @@ interface TReview {
   booking_id: string;
   user_id: string;
   property_id: string;
-  host_id: String;
+  host_id: string;
   comment: string;
   rating: number;
   user_name: string;
@@ -31,7 +31,7 @@ const reviewSchema = new mongoose.Schema<TReview>({
     required: true,
   },
   host_id: {
-    typeS: String,
+    type: String,
     required: true,
   },
   user_name: {

@@ -11,6 +11,10 @@ interface TBooking {
 }
 
 const bookingSchema = new mongoose.Schema<TBooking>({
+  host_id: {
+    type: String,
+    required: true,
+  },
   user_id: {
     type: String,
     trim: true,

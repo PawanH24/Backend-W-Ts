@@ -20,7 +20,7 @@ export const validate = (schema: ZodObject) => {
       const error = result.error.issues.map(({ path, message }) => {
         return { path: path.join("."), message };
       });
-      next(new AppError("validation error", 400, error));
+      next(new AppError("validation error", 400, "VALIDATION_ERR", error));
     }
   };
 };

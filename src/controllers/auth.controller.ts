@@ -5,6 +5,7 @@ import { hashPassword } from "../utils/bcrypt.utils";
 import bcrypt from "bcryptjs";
 import { sendResponse } from "../utils/sendResponse.utils";
 import { catchAsync } from "../utils/catchAsync.utils";
+import { generateJwtToken } from "../utils/jwt.utils";
 
 //register
 export const register = catchAsync(async (req, res) => {
@@ -55,6 +56,14 @@ export const login = catchAsync(
     if (!isPasswordValid) {
       throw new AppError("Wrong password", 401);
     }
+
+    //jws token
+    const access_token = generateJwtToken({
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+    });
+
     const { password: _, ...userWithoutPassword } = user.toObject();
 
     // 3. If password is correct, send success
@@ -62,7 +71,7 @@ export const login = catchAsync(
     sendResponse(res, {
       message: "Logged in successfully",
       statusCode: 200,
-      data: userWithoutPassword,
+      data: { user: userWithoutPassword, access_token },
     });
   },
 );
