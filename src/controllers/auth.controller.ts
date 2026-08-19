@@ -10,16 +10,17 @@ import { generateJwtToken } from "../utils/jwt.utils";
 //register
 export const register = catchAsync(async (req, res) => {
   const { fullName, email, password, phone } = req.body;
-  if (!fullName) {
-    //   const error: any = new Error("full_name required");
-    //   error.statusCode = 400;
-    //   error.status = "fail";
-    //   error.success = false;
-    throw new AppError("full_name is required", 400);
-  }
-  if (!email) throw new AppError("email is required", 400);
+  const file = req.file;
+  // if (!fullName) {
+  //   //   const error: any = new Error("full_name required");
+  //   //   error.statusCode = 400;
+  //   //   error.status = "fail";
+  //   //   error.success = false;
+  //   throw new AppError("full_name is required", 400);
+  // }
+  // if (!email) throw new AppError("email is required", 400);
 
-  if (!password) throw new AppError("password is required", 400);
+  // if (!password) throw new AppError("password is required", 400);
   const existingUser = await User.findOne({ email });
   if (existingUser)
     throw new AppError("User already exists with this email", 409);
@@ -29,6 +30,9 @@ export const register = catchAsync(async (req, res) => {
   const user = new User({ fullName, email, password: hashedPassword, phone });
 
   //upload profile image
+  if (file) {
+    user.profile_image = file?.path;
+  }
 
   await user.save();
 

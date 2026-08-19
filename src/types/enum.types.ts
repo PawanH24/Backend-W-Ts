@@ -9,6 +9,7 @@ export enum PropertyType {
   Apartment = "Apartment",
   House = "House",
   Banglow = "Banglow",
+  Villa = "Villa",
 }
 
 export enum PriceType {
