@@ -7,6 +7,8 @@ import {
   remove,
 } from "../controllers/property.controller.js";
 import upload from "../middlewares/upload.middleware.js";
+import propertyValidator from "../validators/property.validator.js";
+import { validate } from "../middlewares/validator.middleware.js";
 
 const route = Router();
 
@@ -18,6 +20,7 @@ route.post(
     { name: "property_image", maxCount: 1 },
     { name: "gallery_images", maxCount: 10 },
   ]),
+  validate(propertyValidator),
   create,
 );
 route.put("/:id", update);

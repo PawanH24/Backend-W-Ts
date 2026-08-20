@@ -17,6 +17,7 @@ export const validate = (schema: ZodObject) => {
       next();
     } else {
       console.log(result.error);
+
       const error = result.error.issues.map(({ path, message }) => {
         return { path: path.join("."), message };
       });
