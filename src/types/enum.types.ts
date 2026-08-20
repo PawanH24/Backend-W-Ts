@@ -18,3 +18,18 @@ export enum PriceType {
   PER_WEEK = "per_week",
   PER_MONTH = "per_month",
 }
+
+export enum AmenitiesType {
+  WIFI = "wifi",
+  SMART_TV = "smart_tv",
+  KITCHEN = "kitchen",
+  REFRIGERATOR = "refrigerator",
+  MICROWAVE = "microwave",
+  AIR_CONDITIONING = "air_conditioning",
+  FREE_PARKING = "free_parking",
+  SWIMMING_POOL = "swimming_pool",
+  GYM = "gym",
+  SMOKE_ALARM = "smoke_alarm",
+  FIRST_AID_KIT = "first_aid_kit",
+  FIRE_EXTINGUISHER = "fire_extinguisher",
+}

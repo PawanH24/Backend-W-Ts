@@ -31,7 +31,7 @@ export const register = catchAsync(async (req, res) => {
 
   //upload profile image
   if (file) {
-    user.profile_image = file?.path;
+    user.profile_image = file.path;
   }
 
   await user.save();

@@ -15,6 +15,8 @@ interface TProperty {
   };
   rooms: number;
   property_type: PropertyType;
+  main_image: string;
+  gallery_images: string[];
 }
 
 const propertySchema = new mongoose.Schema<TProperty>({
@@ -58,6 +60,14 @@ const propertySchema = new mongoose.Schema<TProperty>({
     type: String,
     required: true,
     enum: Object.values(PropertyType),
+  },
+  main_image: {
+    type: String,
+    required: true,
+  },
+  gallery_images: {
+    type: [String],
+    default: [],
   },
 });
 

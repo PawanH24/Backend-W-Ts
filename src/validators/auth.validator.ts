@@ -31,3 +31,13 @@ export const registerValidator = z.object({
     phone: z.string().optional(),
   }),
 });
+
+export const changePasswordValidator = z.object({
+  body: z.object({
+    email: z.string().trim(),
+    password: z.string(),
+    new_password: z
+      .string()
+      .min(6, "Password must contain atleast 6 characters"),
+  }),
+});
