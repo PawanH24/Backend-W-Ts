@@ -5,15 +5,15 @@ import {
   create,
   update,
   remove,
-} from "../controllers/booking.controller.js";
+} from "../controllers/amenity.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { bookingValidator } from "../validators/booking.validator.js";
+import { amenityValidator } from "../validators/amenity.validator.js";
 
 const route = Router();
 
 route.get("/", getAll);
 route.get("/:id", getById);
-route.post("", validate(bookingValidator), create);
+route.post("", validate(amenityValidator), create);
 route.put("/:id", update);
 route.delete("/:id", remove);
 
