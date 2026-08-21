@@ -30,10 +30,6 @@ const reviewSchema = new mongoose.Schema<TReview>({
     type: String,
     required: true,
   },
-  host_id: {
-    type: String,
-    required: true,
-  },
   user_name: {
     type: String,
   },

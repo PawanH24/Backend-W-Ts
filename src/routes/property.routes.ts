@@ -6,11 +6,12 @@ import {
   update,
   remove,
 } from "../controllers/property.controller.js";
-import upload from "../middlewares/upload.middleware.js";
+import uploader from "../middlewares/upload.middleware.js";
 import propertyValidator from "../validators/property.validator.js";
 import { validate } from "../middlewares/validator.middleware.js";
 
 const route = Router();
+const upload = uploader();
 
 route.get("/", getAll);
 route.get("/:id", getById);

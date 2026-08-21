@@ -10,9 +10,10 @@ import {
   registerValidator,
   changePasswordValidator,
 } from "../validators/auth.validator";
-import upload from "../middlewares/upload.middleware";
+import uploader from "../middlewares/upload.middleware";
 
 const router = Router();
+const upload = uploader();
 
 router.post(
   "/register",
