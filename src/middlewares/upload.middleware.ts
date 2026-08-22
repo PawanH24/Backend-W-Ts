@@ -1,6 +1,8 @@
 import multer from "multer";
 import fs from "fs";
 import { Request } from "express";
+import AppError from "../utils/appError.utils";
+import path from "path";
 
 const uploader = () => {
   const folder = "uploads/";
@@ -34,7 +36,18 @@ const uploader = () => {
     req: Request,
     file: Express.Multer.File,
     cb: multer.FileFilterCallback,
-  ) => {};
+  ) => {
+    //check if file extension is allowed
+    if (!allowed_exts.includes(path.extname(file.originalname).toLowerCase())) {
+      cb(new AppError(`only ${allowed_exts.join(",")} type is allowed`, 422));
+    }
+    //check if file mimetype is allowed
+    if (!allowed_mime_types.includes(file.mimetype)) {
+      cb(new AppError(`invalid file type.only image & pdf is allowed`, 422));
+      return;
+    }
+    cb(null, true);
+  };
 
   //multer upload instance
   const upload = multer({

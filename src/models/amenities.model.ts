@@ -27,3 +27,4 @@ const amenitiesSchema = new mongoose.Schema<TAmenities>({
 
 const Amenities = mongoose.model("Amenities", amenitiesSchema);
 export default Amenities;
+//create image module with models wehre its has tpes of mmage with some image type being true for main image oter being for multiple images.
