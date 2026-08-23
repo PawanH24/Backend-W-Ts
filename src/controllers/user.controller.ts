@@ -3,9 +3,15 @@ import User from "../models/user.model.js";
 import { catchAsync } from "../utils/catchAsync.utils.js";
 import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
+import { Role } from "../types/enum.types.js";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const users = await User.find({}).select("-password");
+  const filter: any = {};
+  const { role = Role.USER } = req.query;
+  if (role) {
+    filter.role = role;
+  }
+  const users = await User.find(filter).select("-password");
   sendResponse(res, {
     message: "Displaying all users",
     statusCode: 200,

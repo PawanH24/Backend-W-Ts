@@ -33,3 +33,10 @@ export enum AmenitiesType {
   FIRST_AID_KIT = "first_aid_kit",
   FIRE_EXTINGUISHER = "fire_extinguisher",
 }
+
+export enum ImageType {
+  AMENITY_ICON = "amenity_icon",
+  PROPERTY_MAIN = "property_main",
+  PROPERTY_GALLERY = "property_gallery",
+  USER_PROFILE = "user_profile",
+}

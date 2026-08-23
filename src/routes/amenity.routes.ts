@@ -15,7 +15,7 @@ const upload = uploader();
 
 route.get("/", getAll);
 route.get("/:id", getById);
-route.post("", upload.single("icon"), validate(amenityValidator), create);
+route.post("/", upload.single("icon"), validate(amenityValidator), create);
 route.put("/:id", update);
 route.delete("/:id", remove);
 
