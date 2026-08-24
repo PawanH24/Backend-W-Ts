@@ -11,7 +11,9 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   if (role) {
     filter.role = role;
   }
-  const users = await User.find(filter).select("-password");
+  const users = await User.find(filter)
+    .select("-password")
+    .populate("profile_image");
   sendResponse(res, {
     message: "Displaying all users",
     statusCode: 200,
@@ -21,7 +23,9 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
 
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = await User.findById(id).select("-password");
+  const user = await User.findById(id)
+    .select("-password")
+    .populate("profile_iamge");
   if (!user) throw new AppError("user not found", 404);
   sendResponse(res, {
     message: "user found successfully",

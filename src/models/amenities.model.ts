@@ -1,30 +1,43 @@
 import mongoose from "mongoose";
-import { AmenitiesType } from "../types/enum.types";
 
 interface TAmenities {
   name: string;
-  category: AmenitiesType;
+  description: string;
   icon: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
 }
 
-const amenitiesSchema = new mongoose.Schema<TAmenities>({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
+const amenitiesSchema = new mongoose.Schema<TAmenities>(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: [true, "amenity already exists"],
+      trim: true,
+    },
+    // category: {
+    //   type: String,
+    //   enum: Object.values(AmenitiesType),
+    //   required: true,
+    // },
+    description: {
+      type: String,
+      required: [true, "description is required"],
+      minLength: [10, "at least 10 characters required"],
+    },
+    icon: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+      ref: "Image",
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "user is required"],
+      ref: "user",
+    },
   },
-  category: {
-    type: String,
-    enum: Object.values(AmenitiesType),
-    required: true,
-  },
-  icon: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: null,
-    ref: "Image",
-  },
-});
+  { timestamps: true },
+);
 
 const Amenities = mongoose.model<TAmenities>("Amenities", amenitiesSchema);
 export default Amenities;

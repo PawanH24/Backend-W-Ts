@@ -5,7 +5,7 @@ import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const amenity = await Amenity.find({});
+  const amenity = await Amenity.find({}).populate("icon");
 
   sendResponse(res, {
     message: "Displaying all amenity",
@@ -17,7 +17,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const amenity = await Amenity.findById(id);
+  const amenity = await Amenity.findById(id).populate("icon");
 
   if (!amenity) {
     throw new AppError("Amenity not found", 404);
