@@ -5,7 +5,7 @@ interface TUserDocument extends Document {
   email: string;
   password: string;
   phone?: string;
-  profile_image: mongoose.Types.ObjectId;
+  profile_image: String;
   role: Role;
 }
 
@@ -41,9 +41,8 @@ const userSchema = new mongoose.Schema<TUserDocument>(
       trim: true,
     },
     profile_image: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       default: null,
-      ref: "Image",
     },
   },
   { timestamps: true },

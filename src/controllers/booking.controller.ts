@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import Booking from "../models/booking.model.js";
-import { catchAsync } from "../utils/catchAsync.utils.js";
-import AppError from "../utils/appError.utils.js";
-import { sendResponse } from "../utils/sendResponse.utils.js";
+import Booking from "../models/booking.model";
+import { catchAsync } from "../utils/catchAsync.utils";
+import AppError from "../utils/appError.utils";
+import { sendResponse } from "../utils/sendResponse.utils";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const bookings = await Booking.find({});

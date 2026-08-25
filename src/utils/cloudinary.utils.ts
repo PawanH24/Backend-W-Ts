@@ -16,7 +16,7 @@ export const uploadFileToCloudinary = async (
       },
     );
 
-    //delte file from upload
+    //delete file from upload
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
     }

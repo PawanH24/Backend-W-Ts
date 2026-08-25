@@ -15,8 +15,8 @@ interface TProperty extends Document {
   };
   rooms: number;
   property_type: PropertyType;
-  main_image: mongoose.Types.ObjectId;
-  gallery_images: mongoose.Types.ObjectId[];
+  main_image: string;
+  gallery_images: string[];
 }
 
 const propertySchema = new mongoose.Schema<TProperty>({
@@ -62,14 +62,12 @@ const propertySchema = new mongoose.Schema<TProperty>({
     enum: Object.values(PropertyType),
   },
   main_image: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "Image",
   },
   gallery_images: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     default: [],
-    ref: "Image",
   },
 });
 

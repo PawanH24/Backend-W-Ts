@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import Amenity from "../models/amenities.model.js";
-import { catchAsync } from "../utils/catchAsync.utils.js";
-import AppError from "../utils/appError.utils.js";
-import { sendResponse } from "../utils/sendResponse.utils.js";
+import Amenity from "../models/amenities.model";
+import { catchAsync } from "../utils/catchAsync.utils";
+import AppError from "../utils/appError.utils";
+import { sendResponse } from "../utils/sendResponse.utils";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const amenity = await Amenity.find({}).populate("icon");
