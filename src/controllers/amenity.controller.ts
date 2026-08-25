@@ -3,9 +3,11 @@ import Amenity from "../models/amenities.model";
 import { catchAsync } from "../utils/catchAsync.utils";
 import AppError from "../utils/appError.utils";
 import { sendResponse } from "../utils/sendResponse.utils";
+import { uploadFileToCloudinary } from "../utils/cloudinary.utils";
+const folder = "/amenities";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const amenity = await Amenity.find({}).populate("icon");
+  const amenity = await Amenity.find({});
 
   sendResponse(res, {
     message: "Displaying all amenity",
@@ -17,7 +19,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const amenity = await Amenity.findById(id).populate("icon");
+  const amenity = await Amenity.findById(id);
 
   if (!amenity) {
     throw new AppError("Amenity not found", 404);
@@ -31,9 +33,17 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const data = req.body;
+  const { name, description, user } = req.body;
+  const file = req.file;
 
-  const amenity = await Amenity.create(data);
+  if (!file) throw new AppError("Logo is required", 400, "VALIDATION_ERR");
+
+  const amenity = new Amenity({ name, description, user });
+  const { path, public_id } = await uploadFileToCloudinary(file, folder);
+  amenity.icon = {
+    path,
+    public_id,
+  };
 
   sendResponse(res, {
     message: "Amenity created successfully",

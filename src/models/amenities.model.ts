@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 interface TAmenities {
   name: string;
   description: string;
-  icon: string;
+  icon: { path: string; public_id: string };
   user: mongoose.Types.ObjectId;
 }
 
@@ -26,8 +26,12 @@ const amenitiesSchema = new mongoose.Schema<TAmenities>(
       minLength: [10, "at least 10 characters required"],
     },
     icon: {
-      type: String,
+      type: {
+        path: { type: String, required: true },
+        public_id: { type: String, required: true },
+      },
       default: null,
+      _id: false,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

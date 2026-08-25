@@ -6,6 +6,9 @@ import bcrypt from "bcryptjs";
 import { sendResponse } from "../utils/sendResponse.utils";
 import { catchAsync } from "../utils/catchAsync.utils";
 import { generateJwtToken } from "../utils/jwt.utils";
+import { uploadFileToCloudinary } from "../utils/cloudinary.utils";
+
+const folder = "/profile-images";
 
 //register
 export const register = catchAsync(async (req, res) => {
@@ -31,7 +34,13 @@ export const register = catchAsync(async (req, res) => {
 
   //upload profile image
   if (file) {
-    user.profile_image = file.path;
+    // user.profile_image = file.path;
+    //upload file to cloudinary
+    const { path, public_id } = await uploadFileToCloudinary(file, folder);
+    user.profile_image = {
+      path,
+      public_id,
+    };
   }
 
   await user.save();

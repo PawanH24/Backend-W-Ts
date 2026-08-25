@@ -5,9 +5,7 @@ import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const property = await Property.find({})
-    .populate("main_image")
-    .populate("gallery_image");
+  const property = await Property.find({});
 
   sendResponse(res, {
     message: "Displaying all reviews",
@@ -19,9 +17,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const property = await Property.findById(id)
-    .populate("main_image")
-    .populate("gallery_image");
+  const property = await Property.findById(id);
 
   if (!property) {
     throw new AppError("Property not found", 404);

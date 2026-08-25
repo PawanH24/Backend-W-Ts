@@ -14,6 +14,7 @@ const uploader = () => {
     "image/jpeg",
     "image/svg+xml",
     "application/pdf",
+    "application/octet-stream",
   ];
 
   //create upload folder is not exixts
@@ -46,6 +47,7 @@ const uploader = () => {
       cb(new AppError(`invalid file type.only image & pdf is allowed`, 422));
       return;
     }
+
     cb(null, true);
   };
 
