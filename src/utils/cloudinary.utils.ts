@@ -33,3 +33,13 @@ export const uploadFileToCloudinary = async (
 };
 
 //delete file from cloudinary
+export const deleteFileFromCloudinary = async (public_id: string) => {
+  try {
+    await cloudinary.uploader.destroy(public_id);
+    return true;
+  } catch (error: any) {
+    throw new AppError("something went wrong", 500, "INTERNAL SERVER ERROR", [
+      { message: error.message },
+    ]);
+  }
+};

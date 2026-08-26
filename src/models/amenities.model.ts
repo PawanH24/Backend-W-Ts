@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import imageSchema from "../models/image.model";
+import { TImage } from "../types/global.types";
 
 interface TAmenities {
   name: string;
   description: string;
-  icon: { path: string; public_id: string };
+  icon: TImage;
   user: mongoose.Types.ObjectId;
 }
 

@@ -5,3 +5,8 @@ export type TResponseCode =
   | "UNAUTHORIZED"
   | "FORBIDDEN"
   | "NOT FOUND";
+
+export type TImage = {
+  path: string;
+  public_id: string;
+};

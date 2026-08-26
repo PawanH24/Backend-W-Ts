@@ -1,11 +1,13 @@
 import mongoose, { Document } from "mongoose";
 import { Role } from "../types/enum.types";
+import imageSchema from "./image.model";
+import { TImage } from "../types/global.types";
 interface TUserDocument extends Document {
   fullName: string;
   email: string;
   password: string;
   phone?: string;
-  profile_image: { path: string; public_id: string };
+  profile_image: TImage;
   role: Role;
 }
 
@@ -41,10 +43,7 @@ const userSchema = new mongoose.Schema<TUserDocument>(
       trim: true,
     },
     profile_image: {
-      type: {
-        path: { type: String, required: true },
-        public_id: { type: String, required: true },
-      },
+      type: imageSchema,
       default: null,
       _id: false,
     },

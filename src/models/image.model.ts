@@ -1,11 +1,7 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
+import { TImage } from "../types/global.types";
 
-export interface IImageDocument extends Document {
-  path: string;
-  public_id: string;
-}
-
-const imageSchema = new mongoose.Schema<IImageDocument>({
+const imageSchema = new mongoose.Schema<TImage>({
   path: {
     type: String,
     required: [true, "Image path is requred"],

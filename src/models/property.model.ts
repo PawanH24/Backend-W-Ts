@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { PropertyType, PriceType } from "../types/enum.types";
-import imageSchema, { IImageDocument } from "./image.model";
+import imageSchema from "./image.model";
+import { TImage } from "../types/global.types";
 
 interface TProperty extends Document {
   host: mongoose.Types.ObjectId;
@@ -16,8 +17,8 @@ interface TProperty extends Document {
   };
   rooms: number;
   property_type: PropertyType;
-  main_image: IImageDocument;
-  gallery_images: IImageDocument[];
+  main_image: TImage;
+  gallery_images: TImage[];
 }
 
 const propertySchema = new mongoose.Schema<TProperty>({
