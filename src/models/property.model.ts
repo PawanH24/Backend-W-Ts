@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { PropertyType, PriceType } from "../types/enum.types";
+import imageSchema, { IImageDocument } from "./image.model";
 
 interface TProperty extends Document {
   host: mongoose.Types.ObjectId;
@@ -15,8 +16,8 @@ interface TProperty extends Document {
   };
   rooms: number;
   property_type: PropertyType;
-  main_image: string;
-  gallery_images: string[];
+  main_image: IImageDocument;
+  gallery_images: IImageDocument[];
 }
 
 const propertySchema = new mongoose.Schema<TProperty>({
@@ -62,11 +63,11 @@ const propertySchema = new mongoose.Schema<TProperty>({
     enum: Object.values(PropertyType),
   },
   main_image: {
-    type: String,
+    type: imageSchema,
     required: true,
   },
   gallery_images: {
-    type: [String],
+    type: [imageSchema],
     default: [],
   },
 });

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import imageSchema from "../models/image.model";
 
 interface TAmenities {
   name: string;
@@ -26,12 +27,10 @@ const amenitiesSchema = new mongoose.Schema<TAmenities>(
       minLength: [10, "at least 10 characters required"],
     },
     icon: {
-      type: {
-        path: { type: String, required: true },
-        public_id: { type: String, required: true },
-      },
+      type: imageSchema,
       default: null,
       _id: false,
+      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -44,4 +43,3 @@ const amenitiesSchema = new mongoose.Schema<TAmenities>(
 
 const Amenities = mongoose.model<TAmenities>("Amenities", amenitiesSchema);
 export default Amenities;
-//create image module with models wehre its has tpes of mmage with some image type being true for main image oter being for multiple images.

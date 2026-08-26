@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/bookings/
+method: POST
+order: 4409839001161638

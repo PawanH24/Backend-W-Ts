@@ -1,0 +1,8 @@
+$kind: http-request
+name: register
+url: http://localhost:8080/v1/auth/register
+method: POST
+body:
+  type: formdata
+  content: []
+order: 2000
