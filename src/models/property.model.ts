@@ -69,7 +69,7 @@ const propertySchema = new mongoose.Schema<TProperty>({
   },
   gallery_images: {
     type: [imageSchema],
-    default: [],
+    required: [true, "image is required"],
   },
 });
 

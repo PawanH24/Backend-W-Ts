@@ -14,7 +14,6 @@ import {
 import uploader from "../middlewares/upload.middleware";
 import { logout } from "../controllers/auth.controller";
 import { authenticate } from "../middlewares/auth.middleware";
-import { Role } from "../types/enum.types";
 
 const router = Router();
 const upload = uploader();
