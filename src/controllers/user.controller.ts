@@ -11,6 +11,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   if (role) {
     filter.role = role;
   }
+
   const users = await User.find(filter).select("-password");
 
   sendResponse(res, {

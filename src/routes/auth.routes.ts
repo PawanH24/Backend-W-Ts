@@ -4,6 +4,7 @@ import {
   login,
   changePassword,
   getProfile,
+  updateProfile,
 } from "../controllers/auth.controller";
 import { validate } from "../middlewares/validator.middleware";
 import {
@@ -36,5 +37,11 @@ router.post(
 router.post("/logout", authenticate(), logout);
 
 router.get("/getProfile", authenticate(), getProfile);
+router.patch(
+  "/updateProfile",
+  authenticate(),
+  upload.single("profile_image"),
+  updateProfile,
+);
 
 export default router;

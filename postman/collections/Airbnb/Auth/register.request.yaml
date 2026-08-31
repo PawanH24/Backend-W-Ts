@@ -4,5 +4,35 @@ url: http://localhost:8080/v1/auth/register
 method: POST
 body:
   type: formdata
-  content: []
+  content:
+    - type: text
+      key: fullName
+      value: ""
+      description: ""
+      disabled: false
+    - type: text
+      key: email
+      value: "@gmail.com"
+      description: ""
+      disabled: false
+    - type: text
+      key: phone
+      value: ""
+      description: ""
+      disabled: false
+    - type: file
+      key: profile_image
+      src: []
+      description: ""
+      disabled: false
+    - type: text
+      key: password
+      value: ""
+      description: ""
+      disabled: false
+    - type: text
+      key: host
+      value: "true"
+      description: ""
+      disabled: true
 order: 2000

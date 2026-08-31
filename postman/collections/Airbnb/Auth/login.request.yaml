@@ -4,5 +4,11 @@ url: http://localhost:8080/v1/auth/login
 method: POST
 body:
   type: json
-  content: ""
+  content: "{\r
+
+    \    \"email\":\"admin@gmail.com\",\r
+
+    \    \"password\":\"admin123\"\r
+
+    }"
 order: 3000

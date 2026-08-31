@@ -25,7 +25,7 @@ export const registerValidator = z.object({
     password: z.string().min(6, "Password must contain at least 6 characters"),
 
     phone: z.string().optional(),
-    host: z.boolean(),
+    host: z.coerce.boolean().optional(),
   }),
 });
 
