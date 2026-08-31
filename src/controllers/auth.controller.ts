@@ -100,6 +100,21 @@ export const login = catchAsync(
   },
 );
 //get profile
+export const getProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.user;
+    const profile = await User.findOne({ _id });
+
+    if (!profile) throw new AppError("something went wrong", 500);
+
+    sendResponse(res, {
+      message: "profile fetched",
+      data: profile,
+      statusCode: 200,
+    });
+  },
+);
+
 // change password
 export const changePassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -138,3 +153,16 @@ export const changePassword = catchAsync(
 );
 //forgot password
 //logout
+export const logout = catchAsync(async (req: Request, res: Response) => {
+  res.clearCookie("access_token", {
+    httpOnly: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+    secure: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+    sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "strict",
+  });
+
+  sendResponse(res, {
+    message: "Logged out successfully",
+    statusCode: 200,
+    data: [],
+  });
+});

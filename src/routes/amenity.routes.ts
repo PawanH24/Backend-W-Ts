@@ -15,10 +15,16 @@ import { Role } from "../types/enum.types.js";
 const route = Router();
 const upload = uploader();
 
-route.get("/", authenticate([Role.HOST, Role.ADMIN, Role.USER]), getAll);
-route.get("/:id", getById);
-route.post("/", upload.single("icon"), validate(amenityValidator), create);
-route.put("/:id", update);
-route.delete("/:id", remove);
-//logout just clear cookie
+route.get("/", authenticate([Role.HOST, Role.ADMIN]), getAll);
+route.get("/:id", authenticate([Role.HOST, Role.ADMIN]), getById);
+route.post(
+  "/",
+  authenticate([Role.HOST]),
+  upload.single("icon"),
+  validate(amenityValidator),
+  create,
+);
+route.put("/:id", authenticate([Role.HOST]), update);
+route.delete("/:id", authenticate([Role.HOST, Role.ADMIN]), remove);
+
 export default route;

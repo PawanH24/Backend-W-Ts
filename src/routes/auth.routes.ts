@@ -3,6 +3,7 @@ import {
   register,
   login,
   changePassword,
+  getProfile,
 } from "../controllers/auth.controller";
 import { validate } from "../middlewares/validator.middleware";
 import {
@@ -11,6 +12,9 @@ import {
   changePasswordValidator,
 } from "../validators/auth.validator";
 import uploader from "../middlewares/upload.middleware";
+import { logout } from "../controllers/auth.controller";
+import { authenticate } from "../middlewares/auth.middleware";
+import { Role } from "../types/enum.types";
 
 const router = Router();
 const upload = uploader();
@@ -29,5 +33,9 @@ router.post(
   validate(changePasswordValidator),
   changePassword,
 );
+
+router.post("/logout", authenticate(), logout);
+
+router.get("/getProfile", authenticate(), getProfile);
 
 export default router;
