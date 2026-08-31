@@ -1,5 +1,0 @@
-$kind: http-request
-name: getAll
-url: http://localhost:8080/amenity
-method: GET
-order: 4420028986950125

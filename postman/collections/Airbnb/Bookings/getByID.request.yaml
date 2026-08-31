@@ -1,5 +1,0 @@
-$kind: http-request
-name: getByID
-url: http://localhost:8080/bookings
-method: GET
-order: 4354116425931761

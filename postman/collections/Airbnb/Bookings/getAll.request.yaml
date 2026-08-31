@@ -1,5 +1,0 @@
-$kind: http-request
-name: getAll
-url: http://localhost:8080/bookings
-method: GET
-order: 4256748889178166
