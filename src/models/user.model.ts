@@ -2,14 +2,14 @@ import mongoose, { Document } from "mongoose";
 import { Role } from "../types/enum.types";
 import imageSchema from "./image.model";
 import { TImage } from "../types/global.types";
-interface TUserDocument extends Document {
+export type TUserDocument = {
   fullName: string;
   email: string;
   password: string;
   phone?: string;
   profile_image: TImage;
   role: Role;
-}
+} & Document;
 
 const userSchema = new mongoose.Schema<TUserDocument>(
   {

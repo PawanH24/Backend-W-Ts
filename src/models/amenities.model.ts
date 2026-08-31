@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import imageSchema from "../models/image.model";
 import { TImage } from "../types/global.types";
+import { TUserDocument } from "./user.model";
 
 interface TAmenities {
   name: string;
   description: string;
   icon: TImage;
-  user: mongoose.Types.ObjectId;
+  user: TUserDocument;
 }
 
 const amenitiesSchema = new mongoose.Schema<TAmenities>(

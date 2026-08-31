@@ -8,6 +8,7 @@ import propertyRoutes from "./routes/property.routes.js";
 import amenityRoutes from "./routes/amenity.routes.js";
 import { connectDatabase } from "./config/db.config.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import cookieParser from "cookie-parser";
 
 import ENV_CONFIG from "./config/env.config.js";
 
@@ -15,6 +16,7 @@ const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
 
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/uploads", express.static("uploads"));

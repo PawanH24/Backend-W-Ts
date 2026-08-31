@@ -36,12 +36,12 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { name, description, user } = req.body;
+  const { name, description } = req.body;
   const file = req.file;
 
   if (!file) throw new AppError("Logo is required", 400, "VALIDATION_ERR");
 
-  const amenity = new Amenity({ name, description, user });
+  const amenity = new Amenity({ name, description });
   const { path, public_id } = await uploadFileToCloudinary(file, folder);
   amenity.icon = {
     path,
@@ -86,12 +86,18 @@ export const update = catchAsync(async (req: Request, res: Response) => {
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-
-  const amenity = await Amenity.findByIdAndDelete(id);
+  const { user } = req.body;
+  const amenity = await Amenity.findOne({ _id: id }).populate("user");
 
   if (!amenity) {
     throw new AppError("Amenity not found", 404);
   }
+  if (amenity.user._id !== user || amenity.user.role !== "ADMIN")
+    throw new AppError("User access denied", 403);
+
+  await deleteFileFromCloudinary(amenity.icon.public_id);
+  await Amenity.deleteOne();
+
   //image needs to be deleted before deleing amenity itself
 
   sendResponse(res, {

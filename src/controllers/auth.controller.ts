@@ -7,6 +7,7 @@ import { sendResponse } from "../utils/sendResponse.utils";
 import { catchAsync } from "../utils/catchAsync.utils";
 import { generateJwtToken } from "../utils/jwt.utils";
 import { uploadFileToCloudinary } from "../utils/cloudinary.utils";
+import ENV_CONFIG from "../config/env.config";
 
 const folder = "/profile-images";
 
@@ -77,6 +78,14 @@ export const login = catchAsync(
       role: user.role,
     });
 
+    //cookie
+    res.cookie("access_token", access_token, {
+      httpOnly: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+      secure: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "strict",
+    });
+
     const { password: _, ...userWithoutPassword } = user.toObject();
 
     // 3. If password is correct, send success
@@ -84,7 +93,9 @@ export const login = catchAsync(
     sendResponse(res, {
       message: "Logged in successfully",
       statusCode: 200,
-      data: { user: userWithoutPassword, access_token },
+      data: {
+        user: userWithoutPassword, //access_token
+      },
     });
   },
 );
@@ -126,3 +137,4 @@ export const changePassword = catchAsync(
   },
 );
 //forgot password
+//logout

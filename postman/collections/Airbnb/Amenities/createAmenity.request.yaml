@@ -1,4 +1,29 @@
 $kind: http-request
+name: createAmenity
 url: http://localhost:8080/amenity
 method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: wifi
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: sdfasdfsdfasdfa
+      description: ""
+      disabled: false
+    - type: file
+      key: icon
+      src:
+        - /C:/Users/Pawan/Pictures/pquil-P.png
+      description: ""
+      disabled: false
+    - type: text
+      key: user
+      value: 6a8d0b86b60acee44a9c9277
+      description: ""
+      disabled: false
 order: 4502490372245134

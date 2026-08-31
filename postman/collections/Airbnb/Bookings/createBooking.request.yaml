@@ -1,4 +1,24 @@
 $kind: http-request
+name: createBooking
 url: http://localhost:8080/bookings/
 method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"host_id\":\"1\",\r
+
+    \    \"user_id\":\"2\",\r
+
+    \    \"property_id\":\"3\",\r
+
+    \    \"total_price\":1200,\r
+
+    \    \"payment_status\":false,\r
+
+    \    \"check_in\":\"2026/08/12\",\r
+
+    \    \"check_out\":\"2028/02/11\"\r
+
+    }"
 order: 4409839001161638
