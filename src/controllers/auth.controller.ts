@@ -8,12 +8,13 @@ import { catchAsync } from "../utils/catchAsync.utils";
 import { generateJwtToken } from "../utils/jwt.utils";
 import { uploadFileToCloudinary } from "../utils/cloudinary.utils";
 import ENV_CONFIG from "../config/env.config";
+import { Role } from "../types/enum.types";
 
 const folder = "/profile-images";
 
 //register
 export const register = catchAsync(async (req, res) => {
-  const { fullName, email, password, phone } = req.body;
+  const { fullName, email, password, phone, host = false } = req.body;
   const file = req.file;
   // if (!fullName) {
   //   //   const error: any = new Error("full_name required");
@@ -32,6 +33,10 @@ export const register = catchAsync(async (req, res) => {
   const hashedPassword = await hashPassword(password);
   //user instance
   const user = new User({ fullName, email, password: hashedPassword, phone });
+
+  if (host) {
+    user.role = Role.HOST;
+  }
 
   //upload profile image
   if (file) {
@@ -152,6 +157,7 @@ export const changePassword = catchAsync(
   },
 );
 //forgot password
+
 //logout
 export const logout = catchAsync(async (req: Request, res: Response) => {
   res.clearCookie("access_token", {
