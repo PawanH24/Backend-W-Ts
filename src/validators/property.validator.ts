@@ -21,7 +21,7 @@ const propertyValidator = z.object({
       street_name: z.string().trim().min(1, "Street name is required"),
       zipcode: z.string().trim().min(1, "Zipcode is required"),
     }),
-    rooms: z.number(),
+    rooms: z.coerce.number(),
   }),
 });
 

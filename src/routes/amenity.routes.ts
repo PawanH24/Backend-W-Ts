@@ -24,7 +24,7 @@ route.post(
   validate(amenityValidator),
   create,
 );
-route.put("/:id", authenticate([Role.HOST]), update);
+route.put("/:id", authenticate([Role.HOST]), upload.single("icon"), update);
 route.delete("/:id", authenticate([Role.HOST, Role.ADMIN]), remove);
 
 export default route;

@@ -5,7 +5,7 @@ import AppError from "../utils/appError.utils";
 export const validate = (schema: ZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse({
-      body: req.body,
+      body: { ...req.body, address: JSON.parse(req.body.address ?? "{}") },
       params: req.params,
       query: req.query,
     });

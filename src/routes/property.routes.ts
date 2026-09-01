@@ -9,6 +9,8 @@ import {
 import uploader from "../middlewares/upload.middleware.js";
 import propertyValidator from "../validators/property.validator.js";
 import { validate } from "../middlewares/validator.middleware.js";
+import { authenticate } from "../middlewares/auth.middleware.js";
+import { Role } from "../types/enum.types.js";
 
 const route = Router();
 const upload = uploader();
@@ -17,8 +19,9 @@ route.get("/", getAll);
 route.get("/:id", getById);
 route.post(
   "",
+  authenticate([Role.HOST]),
   upload.fields([
-    { name: "property_image", maxCount: 1 },
+    { name: "main_image", maxCount: 1 },
     { name: "gallery_images", maxCount: 10 },
   ]),
   validate(propertyValidator),

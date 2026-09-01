@@ -39,10 +39,12 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 export const create = catchAsync(async (req: Request, res: Response) => {
   const { name, description } = req.body;
   const file = req.file;
+  const user = req.user;
 
+  console.log(req.body);
   if (!file) throw new AppError("Logo is required", 400, "VALIDATION_ERR");
 
-  const amenity = new Amenity({ name, description });
+  const amenity = new Amenity({ name, description, user: user._id });
   const { path, public_id } = await uploadFileToCloudinary(file, folder);
   amenity.icon = {
     path,
@@ -103,7 +105,10 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
     throw new AppError("Amenity not found", 404, "NOT FOUND");
   }
 
-  if (user.role !== Role.ADMIN || amenity.user._id !== user._id) {
+  if (
+    user.role !== Role.ADMIN &&
+    amenity.user._id.toString() !== user._id.toString()
+  ) {
     throw new AppError("Only admin or owner can update this resource", 400);
   }
 
@@ -115,6 +120,5 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     message: "Amenity deleted successfully",
     statusCode: 200,
-    data: amenity,
   });
 });

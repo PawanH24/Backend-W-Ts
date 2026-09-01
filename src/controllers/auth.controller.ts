@@ -126,24 +126,14 @@ export const getProfile = catchAsync(
 export const updateProfile = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const file = req.file;
-  const { fullName, email, phone } = req.body;
+  const { fullName, phone } = req.body;
 
   const profile = await User.findOne({ _id: user._id });
 
   if (!profile) throw new AppError("Profile not found", 404, "NOT FOUND");
 
-  if (
-    user.role !== Role.ADMIN &&
-    profile._id.toString() !== user._id.toString()
-  ) {
-    throw new AppError(
-      "Only admin or the owner itslef can update this profile.",
-      400,
-    );
-  }
-
   if (fullName) profile.fullName = fullName;
-  if (email) profile.email = email;
+
   if (phone) profile.phone = phone;
   if (file) {
     const { path, public_id } = await uploadFileToCloudinary(file, folder);

@@ -34,11 +34,15 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const update = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.body);
   const id = req.params.id;
-  const data = req.body;
-  const user = await User.findByIdAndUpdate(id, data, {
-    returnDocument: "after",
-  });
+  const { role } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    id,
+    { role },
+    { returnDocument: "after" },
+  );
   if (!user) throw new AppError("User not found", 400);
   sendResponse(res, {
     message: `${user.role} updated successfully`,
