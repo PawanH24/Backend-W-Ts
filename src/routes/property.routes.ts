@@ -27,7 +27,15 @@ route.post(
   validate(propertyValidator),
   create,
 );
-route.put("/:id", update);
-route.delete("/:id", remove);
+route.put(
+  "/:id",
+  authenticate([Role.ADMIN, Role.HOST]),
+  upload.fields([
+    { name: "main_image", maxCount: 1 },
+    { name: "gallery_images", maxCount: 10 },
+  ]),
+  update,
+);
+route.delete("/:id", authenticate([Role.ADMIN, Role.HOST]), remove);
 
 export default route;
