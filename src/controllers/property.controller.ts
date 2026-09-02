@@ -184,6 +184,7 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
     throw new AppError("Only admin or owner can update this property", 400);
 
   await deleteFileFromCloudinary(property.main_image.public_id);
+
   const promises = property.gallery_images.map((img) =>
     deleteFileFromCloudinary(img.public_id),
   );
