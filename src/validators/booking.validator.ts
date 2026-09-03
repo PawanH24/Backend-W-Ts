@@ -13,3 +13,16 @@ export const bookingValidator = z.object({
       path: ["check_out"],
     }),
 });
+
+export const bookingUpdateValidator = z.object({
+  body: z
+    .object({
+      check_in: z.coerce.date(),
+      check_out: z.coerce.date(),
+      payment_status: z.boolean().optional(),
+    })
+    .refine((data) => data.check_out > data.check_in, {
+      message: "Checkout data must be after check-in date",
+      path: ["check_out"],
+    }),
+});

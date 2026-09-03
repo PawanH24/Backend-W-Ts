@@ -54,13 +54,22 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 
   let time = 0;
   if (property.price_type === "per_day") {
-    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24));
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24)),
+    );
   } else if (property.price_type === "per_hour") {
-    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60));
+    time = Math.max(1, Math.round((check_out - check_in) / (1000 * 60 * 60)));
   } else if (property.price_type === "per_week") {
-    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24 * 7));
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24 * 7)),
+    );
   } else if (property.price_type === "per_month") {
-    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24 * 30));
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24 * 30)),
+    );
   }
 
   const booking = await Booking.create({
@@ -86,15 +95,38 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 
 export const update = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const data = req.body;
+  const { check_in, check_out } = req.body;
 
-  const booking = await Booking.findByIdAndUpdate(id, data, {
-    returnDocument: "after",
-  });
+  const booking = await Booking.findById(id).populate("property");
+  if (!booking) throw new AppError("Booking not found", 404);
+  if (!booking.property)
+    throw new AppError("Property information missing", 404);
 
-  if (!booking) {
-    throw new AppError("Booking not found", 404);
+  const property = booking.property as any;
+  let time = 0;
+  if (property.price_type === "per_day") {
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24)),
+    );
+  } else if (property.price_type === "per_hour") {
+    time = Math.max(1, Math.round((check_out - check_in) / (1000 * 60 * 60)));
+  } else if (property.price_type === "per_week") {
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24 * 7)),
+    );
+  } else if (property.price_type === "per_month") {
+    time = Math.max(
+      1,
+      Math.round((check_out - check_in) / (1000 * 60 * 60 * 24 * 30)),
+    );
   }
+
+  booking.check_in = check_in;
+  booking.check_out = check_out;
+  booking.total_price = property.amount * time;
+  await booking.save();
 
   sendResponse(res, {
     message: "Booking updated successfully",
