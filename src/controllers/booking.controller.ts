@@ -42,7 +42,7 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { property_id, total_price, check_in, check_out } = req.body;
+  const { property_id, check_in, check_out } = req.body;
   const user_id = req.user._id;
 
   const property = await Property.findById(property_id);
@@ -51,13 +51,25 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 
   if (property.host.equals(user_id))
     throw new AppError("You cannot book your own property", 400);
+
+  let time = 0;
+  if (property.price_type === "per_day") {
+    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24));
+  } else if (property.price_type === "per_hour") {
+    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60));
+  } else if (property.price_type === "per_week") {
+    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24 * 7));
+  } else if (property.price_type === "per_month") {
+    time = Math.ceil((check_out - check_in) / (1000 * 60 * 60 * 24 * 30));
+  }
+
   const booking = await Booking.create({
     user: user_id,
     host: property.host,
     property: property_id,
-    check_in: new Date(check_in),
-    check_out: new Date(check_out),
-    total_price,
+    check_in,
+    check_out,
+    total_price: property.amount * time,
     payment_status: false,
   });
 
