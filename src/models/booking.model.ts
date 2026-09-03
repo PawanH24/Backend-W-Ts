@@ -1,29 +1,29 @@
 import mongoose from "mongoose";
 
 interface TBooking {
-  user_id: mongoose.Types.ObjectId;
-  property_id: mongoose.Types.ObjectId;
-  host_id: mongoose.Types.ObjectId;
-  check_in: string;
-  check_out: string;
+  user: mongoose.Types.ObjectId;
+  property: mongoose.Types.ObjectId;
+  host: mongoose.Types.ObjectId;
+  check_in: Date;
+  check_out: Date;
   total_price: number;
   payment_status: boolean;
 }
 
 const bookingSchema = new mongoose.Schema<TBooking>(
   {
-    host_id: {
+    host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
-    user_id: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
 
-    property_id: {
+    property: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "property",
       required: true,
@@ -38,11 +38,11 @@ const bookingSchema = new mongoose.Schema<TBooking>(
       default: false,
     },
     check_in: {
-      type: String,
+      type: Date,
       required: true,
     },
     check_out: {
-      type: String,
+      type: Date,
       required: true,
     },
   },

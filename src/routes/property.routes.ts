@@ -20,7 +20,7 @@ const route = Router();
 const upload = uploader();
 
 route.get("/", getAll);
-route.get("/", authenticate([Role.HOST]), getByHost);
+route.get("/:id", authenticate([Role.HOST]), getByHost);
 route.get("/:id", getById);
 route.post(
   "",

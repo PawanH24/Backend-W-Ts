@@ -16,6 +16,14 @@ const ENV_CONFIG = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!!,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY!!,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!!,
+
+  //nodemailer
+  SMTP_HOST: process.env.SMTP_HOST!!,
+  SMTP_SERVICE: process.env.SMTP_SERVICE!!,
+  SMTP_PORT: Number(process.env.SMTP_PORT) ?? 465,
+  SMTP_USER: process.env.SMTP_USER!!,
+  SMTP_PASS: process.env.SMTP_PASS!!,
+  SMTP_MAIL_FROM: process.env.SMTP_MAIL_FROM!!,
 };
 
 // const envSchema = z.object({

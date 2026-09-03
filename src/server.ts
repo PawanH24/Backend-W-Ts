@@ -11,6 +11,8 @@ import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import cookieParser from "cookie-parser";
 
 import ENV_CONFIG from "./config/env.config.js";
+import { verifySmtpServer } from "./config/nodemailer.config.js";
+import { sendEmail } from "./utils/sendEmail.utils.js";
 
 const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
@@ -46,6 +48,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(errorHandler);
 
 const server = http.createServer(app);
-server.listen(PORT, (): void =>
-  console.log(`Server running on http://localhost:${PORT}`),
-);
+server.listen(PORT, (): void => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  //verifySmtpServer(),
+  //sendEmail());
+});

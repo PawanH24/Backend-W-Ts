@@ -4,18 +4,19 @@ import { catchAsync } from "../utils/catchAsync.utils";
 import AppError from "../utils/appError.utils";
 import { sendResponse } from "../utils/sendResponse.utils";
 import { Role } from "../types/enum.types";
+import Property from "../models/property.model";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const filter: any = {};
-  // 🔒 Security Layer: Filter access based on the user's role
-  // Regular traveler: only show trips they booked
-  if (user.role === Role.USER) filter.user_id = user._id;
-  // Property host: only show reservations on their listings
-  else if (user.role === Role.HOST) filter.host_id = user._id;
-  // If user.role === Role.ADMIN, the filter stays empty ({}) so they see everything!
 
-  const bookings = await Booking.find(filter);
+  if (user.role === Role.USER) filter.user = user._id;
+  else if (user.role === Role.HOST) filter.host = user._id;
+
+  const bookings = await Booking.find(filter)
+    .populate("property", "name address main_image")
+    .populate("host", "fullName email phone profile_image")
+    .populate("user", "fullName email phone profile_image");
 
   sendResponse(res, {
     message: "Displaying all bookings",
@@ -41,11 +42,28 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { property_id, total_price, payment_status, check_in, check_out } =
-    req.body;
-  const data = req.body;
+  const { property_id, total_price, check_in, check_out } = req.body;
+  const user_id = req.user._id;
 
-  const booking = await Booking.create(data);
+  const property = await Property.findById(property_id);
+  if (!property)
+    throw new AppError("property you are trying to book does not exist", 404);
+
+  if (property.host.equals(user_id))
+    throw new AppError("You cannot book your own property", 400);
+  const booking = await Booking.create({
+    user: user_id,
+    host: property.host,
+    property: property_id,
+    check_in: new Date(check_in),
+    check_out: new Date(check_out),
+    total_price,
+    payment_status: false,
+  });
+
+  await booking.populate("user", "fullName email phone profile_image");
+  await booking.populate("host", "fullName email phone profile_image");
+  await booking.populate("property", "name address main_image");
 
   sendResponse(res, {
     message: "Booking created successfully",

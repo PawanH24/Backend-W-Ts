@@ -1,12 +1,13 @@
 import nodemailer from "nodemailer";
+import ENV_CONFIG from "./env.config";
 
 //*nodemailer transporter
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  service: "gmail",
-  port: 465,
-  secure: true,
-  auth: { user: "hadapawan20@gmail.com", pass: "brrm tgml gaps sttx" },
+  host: ENV_CONFIG.SMTP_HOST,
+  service: ENV_CONFIG.SMTP_SERVICE,
+  port: ENV_CONFIG.SMTP_PORT,
+  secure: ENV_CONFIG.SMTP_PORT === 465,
+  auth: { user: ENV_CONFIG.SMTP_USER, pass: ENV_CONFIG.SMTP_PASS },
 });
 
 export const verifySmtpServer = async () => {

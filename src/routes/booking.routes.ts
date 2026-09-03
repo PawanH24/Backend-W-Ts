@@ -8,12 +8,13 @@ import {
 } from "../controllers/booking.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { bookingValidator } from "../validators/booking.validator.js";
+import { authenticate } from "../middlewares/auth.middleware.js";
 
 const route = Router();
 
-route.get("/", getAll);
+route.get("/", authenticate(), getAll);
 route.get("/:id", getById);
-route.post("", validate(bookingValidator), create);
+route.post("", authenticate(), validate(bookingValidator), create);
 route.put("/:id", update);
 route.delete("/:id", remove);
 
