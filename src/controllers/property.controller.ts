@@ -15,7 +15,18 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   const property = await Property.find({});
 
   sendResponse(res, {
-    message: "Displaying all reviews",
+    message: "Displaying all properties",
+    statusCode: 200,
+    data: property,
+  });
+});
+
+export const getByHost = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user._id;
+  const property = await Property.find({ host: user });
+
+  sendResponse(res, {
+    message: "Displaying all properties",
     statusCode: 200,
     data: property,
   });
@@ -115,14 +126,11 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     gallery_images: Express.Multer.File[];
   };
 
-  const property = await Property.findOne({ _id: id });
+  const property = await Property.findById(id);
 
   if (!property) throw new AppError("Property not found", 404, "NOT FOUND");
 
-  if (
-    user.role !== Role.ADMIN &&
-    property.host.toString() !== user._id.toString()
-  )
+  if (property.host.toString() !== user._id.toString())
     throw new AppError("Only admin or owner can update this property", 400);
 
   if (name) property.name = name;

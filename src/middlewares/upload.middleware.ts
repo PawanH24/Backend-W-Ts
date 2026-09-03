@@ -7,7 +7,15 @@ import path from "path";
 const uploader = () => {
   const folder = "uploads/";
   const fileSize = 5 * 1024 * 1024;
-  const allowed_exts = [".png", ".jpg", "jpeg", ".webp", ".svg", ".pdf"];
+  const allowed_exts = [
+    ".png",
+    ".jpg",
+    "jpeg",
+    ".webp",
+    ".svg",
+    ".pdf",
+    ".jfif",
+  ];
   const allowed_mime_types = [
     "image/png",
     "image/jpg",

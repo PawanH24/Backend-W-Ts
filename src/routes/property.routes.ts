@@ -5,6 +5,7 @@ import {
   create,
   update,
   remove,
+  getByHost,
 } from "../controllers/property.controller.js";
 import uploader from "../middlewares/upload.middleware.js";
 import {
@@ -19,6 +20,7 @@ const route = Router();
 const upload = uploader();
 
 route.get("/", getAll);
+route.get("/", authenticate([Role.HOST]), getByHost);
 route.get("/:id", getById);
 route.post(
   "",
@@ -32,7 +34,7 @@ route.post(
 );
 route.put(
   "/:id",
-  authenticate([Role.ADMIN, Role.HOST]),
+  authenticate([Role.HOST]),
   upload.fields([
     { name: "main_image", maxCount: 1 },
     { name: "gallery_images", maxCount: 10 },

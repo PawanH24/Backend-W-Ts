@@ -123,6 +123,7 @@ export const getProfile = catchAsync(
   },
 );
 
+//updateProfile
 export const updateProfile = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const file = req.file;

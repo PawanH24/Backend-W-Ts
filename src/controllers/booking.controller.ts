@@ -3,9 +3,19 @@ import Booking from "../models/booking.model";
 import { catchAsync } from "../utils/catchAsync.utils";
 import AppError from "../utils/appError.utils";
 import { sendResponse } from "../utils/sendResponse.utils";
+import { Role } from "../types/enum.types";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const bookings = await Booking.find({});
+  const user = req.user;
+  const filter: any = {};
+  // 🔒 Security Layer: Filter access based on the user's role
+  // Regular traveler: only show trips they booked
+  if (user.role === Role.USER) filter.user_id = user._id;
+  // Property host: only show reservations on their listings
+  else if (user.role === Role.HOST) filter.host_id = user._id;
+  // If user.role === Role.ADMIN, the filter stays empty ({}) so they see everything!
+
+  const bookings = await Booking.find(filter);
 
   sendResponse(res, {
     message: "Displaying all bookings",
@@ -31,6 +41,8 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
+  const { property_id, total_price, payment_status, check_in, check_out } =
+    req.body;
   const data = req.body;
 
   const booking = await Booking.create(data);

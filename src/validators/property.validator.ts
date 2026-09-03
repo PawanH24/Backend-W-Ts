@@ -1,6 +1,13 @@
 import * as z from "zod";
 import { PriceType, PropertyType } from "../types/enum.types";
 
+const addressSchema = z.object({
+  country: z.string().trim().min(1, "Country is required"),
+  city: z.string().trim().min(1, "City is required"),
+  street_name: z.string().trim().min(1, "Street name is required"),
+  zipcode: z.string().trim().min(1, "Zipcode is required"),
+});
+
 const propertyBodySchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -14,12 +21,7 @@ const propertyBodySchema = z.object({
   property_type: z.enum(PropertyType, {
     message: "Invalid property type selection",
   }),
-  address: z.object({
-    country: z.string().trim().min(1, "Country is required"),
-    city: z.string().trim().min(1, "City is required"),
-    street_name: z.string().trim().min(1, "Street name is required"),
-    zipcode: z.string().trim().min(1, "Zipcode is required"),
-  }),
+  address: addressSchema,
   rooms: z.coerce.number(),
 });
 
@@ -28,5 +30,7 @@ export const propertyValidator = z.object({
 });
 
 export const propertyUpdateValidator = z.object({
-  body: propertyBodySchema.partial(),
+  body: propertyBodySchema.partial().extend({
+    address: addressSchema.partial().optional(),
+  }),
 });

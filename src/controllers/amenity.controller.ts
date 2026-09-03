@@ -41,7 +41,6 @@ export const create = catchAsync(async (req: Request, res: Response) => {
   const file = req.file;
   const user = req.user;
 
-  console.log(req.body);
   if (!file) throw new AppError("Logo is required", 400, "VALIDATION_ERR");
 
   const amenity = new Amenity({ name, description, user: user._id });
@@ -70,7 +69,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   if (!amenity) throw new AppError("Amenity not found", 404, "NOT FOUND");
 
   //only admin and owner can update
-  if (user.role !== Role.ADMIN || amenity.user._id !== user._id) {
+  if (user.role !== Role.ADMIN && !amenity.user._id.equals(user._id)) {
     throw new AppError("Only admin or owner can update this resource", 400);
   }
 
@@ -113,7 +112,7 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
   }
 
   await deleteFileFromCloudinary(amenity.icon.public_id);
-  await Amenity.deleteOne();
+  await amenity.deleteOne();
 
   //image needs to be deleted before deleing amenity itself
 
