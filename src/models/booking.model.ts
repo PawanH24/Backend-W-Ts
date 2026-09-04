@@ -17,6 +17,7 @@ const bookingSchema = new mongoose.Schema<TBooking>(
     booking_reference: {
       type: String,
       required: true,
+      default: () => crypto.randomBytes(3).toString("hex").toUpperCase(),
     },
     host: {
       type: mongoose.Schema.Types.ObjectId,
@@ -56,15 +57,6 @@ const bookingSchema = new mongoose.Schema<TBooking>(
     timestamps: true,
   },
 );
-
-bookingSchema.pre("save", async function () {
-  if (!this.booking_reference) {
-    this.booking_reference = crypto
-      .randomBytes(3)
-      .toString("hex")
-      .toUpperCase();
-  }
-});
 
 const Booking = mongoose.model<TBooking>("booking", bookingSchema);
 export default Booking;

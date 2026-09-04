@@ -1,8 +1,13 @@
 $kind: http-request
-name: login
 url: http://localhost:8080/v1/auth/login
 method: POST
 body:
   type: json
-  content: ""
+  content: "{\r
+
+    \    \"email\":\"john@gmail.com\",\r
+
+    \    \"password\":\"john123\"\r
+
+    }"
 order: 3000

@@ -12,7 +12,6 @@ import cookieParser from "cookie-parser";
 
 import ENV_CONFIG from "./config/env.config.js";
 import { verifySmtpServer } from "./config/nodemailer.config.js";
-import { sendEmail } from "./utils/sendEmail.utils.js";
 
 const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
