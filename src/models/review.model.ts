@@ -26,13 +26,6 @@ const reviewSchema = new mongoose.Schema<TReview>({
   rating: {
     type: Number,
   },
-  property_id: {
-    type: String,
-    required: true,
-  },
-  user_name: {
-    type: String,
-  },
 });
 
 const Review = mongoose.model<TReview>("review", reviewSchema);

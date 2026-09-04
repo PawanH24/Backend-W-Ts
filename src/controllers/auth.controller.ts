@@ -12,6 +12,7 @@ import {
 } from "../utils/cloudinary.utils";
 import ENV_CONFIG from "../config/env.config";
 import { Role } from "../types/enum.types";
+import { sendEmail } from "../utils/sendEmail.utils";
 
 const folder = "/profile-images";
 
@@ -53,6 +54,12 @@ export const register = catchAsync(async (req, res) => {
   }
 
   await user.save();
+
+  sendEmail({
+    to: user.email,
+    subject: "Account created",
+    html: `<h1>Account created</h1>`,
+  });
 
   const { password: _, ...userWithoutPassword } = user.toObject();
 

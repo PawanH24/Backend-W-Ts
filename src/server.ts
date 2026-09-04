@@ -50,6 +50,5 @@ app.use(errorHandler);
 const server = http.createServer(app);
 server.listen(PORT, (): void => {
   console.log(`Server running on http://localhost:${PORT}`);
-  //verifySmtpServer(),
-  //sendEmail());
+  verifySmtpServer();
 });

@@ -45,6 +45,7 @@ const bookingSchema = new mongoose.Schema<TBooking>(
       type: Date,
       required: true,
     },
+    //add its own id for ease of searching
   },
   {
     timestamps: true,
