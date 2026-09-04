@@ -137,13 +137,17 @@ export const update = catchAsync(async (req: Request, res: Response) => {
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-
-  const booking = await Booking.findByIdAndDelete(id);
+  const user_id = req.user._id;
+  const booking = await Booking.findOneAndDelete({ _id: id, user: user_id });
 
   if (!booking) {
-    throw new AppError("Booking not found", 404);
+    throw new AppError(
+      "Booking not found or you are not authorized to cancel it",
+      404,
+    );
   }
 
+  await booking.deleteOne();
   sendResponse(res, {
     message: "Booking deleted successfully",
     statusCode: 200,

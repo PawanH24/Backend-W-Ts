@@ -19,6 +19,6 @@ route.get("/", authenticate(), getAll);
 route.get("/:id", getById);
 route.post("", authenticate(), validate(bookingValidator), create);
 route.put("/:id", validate(bookingUpdateValidator), update);
-route.delete("/:id", remove);
+route.delete("/:id", authenticate(), remove);
 
 export default route;
