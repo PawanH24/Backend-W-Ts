@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/amenity
-method: DELETE
-order: 4503597821825330

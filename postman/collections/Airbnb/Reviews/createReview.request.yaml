@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/reviews/
-method: POST
-order: 3877480111038933

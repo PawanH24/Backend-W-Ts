@@ -1,5 +1,0 @@
-$kind: http-request
-name: getByID
-url: http://localhost:8080/property/
-method: GET
-order: 3000
