@@ -13,6 +13,10 @@ import {
 import ENV_CONFIG from "../config/env.config";
 import { Role } from "../types/enum.types";
 import { sendEmail } from "../utils/sendEmail.utils";
+import {
+  generateAccountCreatedHtml,
+  generateAccountLoggedInHtml,
+} from "../utils/emailTemplate.utils";
 
 const folder = "/profile-images";
 
@@ -58,7 +62,12 @@ export const register = catchAsync(async (req, res) => {
   sendEmail({
     to: user.email,
     subject: "Account created",
-    html: `<h1>Account created</h1>`,
+    html: generateAccountCreatedHtml({
+      email: user.email,
+      fullName: user.fullName,
+      created_at: new Date(Date.now()),
+      agent: req.headers["user-agent"] ?? "",
+    }),
   });
 
   const { password: _, ...userWithoutPassword } = user.toObject();
@@ -99,6 +108,17 @@ export const login = catchAsync(
       secure: ENV_CONFIG.NODE_ENV === "development" ? false : true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "strict",
+    });
+
+    sendEmail({
+      to: user.email,
+      subject: "New Login Detected",
+      html: generateAccountLoggedInHtml({
+        fullName: user.fullName,
+        email: user.email,
+        logged_in_at: new Date(),
+        agent: req.get("user-agent") ?? "Unknown Device",
+      }),
     });
 
     const { password: _, ...userWithoutPassword } = user.toObject();
@@ -187,6 +207,9 @@ export const changePassword = catchAsync(
       statusCode: 200,
       data: userWithoutPassword,
     });
+
+    //add a boolean where logout to be true so it loggs out after changing password
+
     // res.status(201).json({
     //   message: "New password added",
     //   data: rest,
