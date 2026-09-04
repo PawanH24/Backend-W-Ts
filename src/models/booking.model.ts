@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import crypto from "crypto";
 
 interface TBooking {
+  booking_reference: string;
   user: mongoose.Types.ObjectId;
   property: mongoose.Types.ObjectId;
   host: mongoose.Types.ObjectId;
@@ -12,6 +14,10 @@ interface TBooking {
 
 const bookingSchema = new mongoose.Schema<TBooking>(
   {
+    booking_reference: {
+      type: String,
+      required: true,
+    },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
@@ -45,12 +51,20 @@ const bookingSchema = new mongoose.Schema<TBooking>(
       type: Date,
       required: true,
     },
-    //add its own id for ease of searching
   },
   {
     timestamps: true,
   },
 );
+
+bookingSchema.pre("save", async function () {
+  if (!this.booking_reference) {
+    this.booking_reference = crypto
+      .randomBytes(3)
+      .toString("hex")
+      .toUpperCase();
+  }
+});
 
 const Booking = mongoose.model<TBooking>("booking", bookingSchema);
 export default Booking;

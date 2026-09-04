@@ -1,0 +1,5 @@
+$kind: http-request
+name: getAll
+url: http://localhost:8080/reviews
+method: GET
+order: 1771981160579678

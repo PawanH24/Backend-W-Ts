@@ -10,12 +10,11 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const filter: any = {};
 
-  if (user.role === Role.USER) filter.user = user._id;
-  else if (user.role === Role.HOST) filter.host = user._id;
+  if (user.role === Role.USER) filter.user = user;
+  else if (user.role === Role.HOST) filter.host = user;
 
   const bookings = await Booking.find(filter)
     .populate("property", "name address main_image")
-    .populate("host", "fullName email phone profile_image")
     .populate("user", "fullName email phone profile_image");
 
   sendResponse(res, {
@@ -25,21 +24,31 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const getById = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
+export const getByReference = catchAsync(
+  async (req: Request, res: Response) => {
+    const reference = (req.params.reference || "") as string;
+    const user = req.user;
 
-  const booking = await Booking.findById(id);
+    const filter: any = { booking_reference: reference.toUpperCase() };
 
-  if (!booking) {
-    throw new AppError("Booking not found", 404);
-  }
+    if (user.role === Role.USER) filter.user = user;
+    else if (user.role === Role.HOST) filter.host = user;
 
-  sendResponse(res, {
-    message: "Booking found successfully",
-    statusCode: 200,
-    data: booking,
-  });
-});
+    const booking = await Booking.findOne(filter)
+      .populate("property", "name address main_image")
+      .populate("user", "fullName email phone profile_image");
+
+    if (!booking) {
+      throw new AppError("Booking not found", 404);
+    }
+
+    sendResponse(res, {
+      message: "Booking found successfully",
+      statusCode: 200,
+      data: booking,
+    });
+  },
+);
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const { property_id, check_in, check_out } = req.body;
@@ -94,10 +103,14 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const update = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const reference = (req.params.reference || "") as string;
+  const user = req.user;
   const { check_in, check_out } = req.body;
 
-  const booking = await Booking.findById(id).populate("property");
+  const booking = await Booking.findOne({
+    booking_reference: reference.toUpperCase(),
+    user: user._id,
+  }).populate("property");
   if (!booking) throw new AppError("Booking not found", 404);
   if (!booking.property)
     throw new AppError("Property information missing", 404);
@@ -136,9 +149,12 @@ export const update = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const reference = (req.params.reference || "") as string;
   const user_id = req.user._id;
-  const booking = await Booking.findOneAndDelete({ _id: id, user: user_id });
+  const booking = await Booking.findOneAndDelete({
+    booking_reference: reference.toUpperCase(),
+    user: user_id,
+  });
 
   if (!booking) {
     throw new AppError(
@@ -147,7 +163,6 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
     );
   }
 
-  await booking.deleteOne();
   sendResponse(res, {
     message: "Booking deleted successfully",
     statusCode: 200,

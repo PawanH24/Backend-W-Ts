@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getAll,
-  getById,
+  getByReference,
   create,
   update,
   remove,
@@ -12,13 +12,19 @@ import {
   bookingUpdateValidator,
 } from "../validators/booking.validator.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
+import { Role } from "../types/enum.types.js";
 
 const route = Router();
 
 route.get("/", authenticate(), getAll);
-route.get("/:id", getById);
+route.get("/:reference", authenticate(), getByReference);
 route.post("", authenticate(), validate(bookingValidator), create);
-route.put("/:id", validate(bookingUpdateValidator), update);
-route.delete("/:id", authenticate(), remove);
+route.put(
+  "/:reference",
+  authenticate([Role.USER]),
+  validate(bookingUpdateValidator),
+  update,
+);
+route.delete("/:reference", authenticate([Role.USER]), remove);
 
 export default route;

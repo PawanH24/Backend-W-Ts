@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/amenity
+method: POST
+order: 4502490372245134
