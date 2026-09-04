@@ -9,7 +9,7 @@ import {
   uploadFileToCloudinary,
 } from "../utils/cloudinary.utils.js";
 
-const folder = "/amenity";
+const folder = "/profile-images";
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const filter: any = {};
   const { role = Role.USER } = req.query;

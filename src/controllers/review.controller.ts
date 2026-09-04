@@ -4,6 +4,8 @@ import { catchAsync } from "../utils/catchAsync.utils.js";
 import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
 
+const folder = "/reviews";
+
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const reviews = await Review.find({});
 
