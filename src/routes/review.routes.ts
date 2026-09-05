@@ -7,16 +7,18 @@ import {
   remove,
 } from "../controllers/review.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { reviewValidator } from "../validators/review.validator.js";
+import {
+  reviewUpdateValidator,
+  reviewValidator,
+} from "../validators/review.validator.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
-import { Role } from "../types/enum.types.js";
 
 const route = Router();
 
-route.get("/", authenticate([Role.HOST, Role.ADMIN, Role.USER]), getAll);
+route.get("/", getAll);
 route.get("/:id", getById);
-route.post("", validate(reviewValidator), create);
-route.put("/:id", update);
-route.delete("/:id", remove);
+route.post("", authenticate(), validate(reviewValidator), create);
+route.put("/:id", authenticate(), validate(reviewUpdateValidator), update);
+route.delete("/:id", authenticate(), remove);
 
 export default route;

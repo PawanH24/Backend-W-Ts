@@ -27,7 +27,6 @@ app.get("/", (req, res) => {
   res.send("Welcome to website");
 });
 app.use("/users", userRoutes);
-// app.use("/v2/auth", authRoutes);
 app.use("/v1/auth", authRoutes);
 app.use("/bookings", bookingRoutes);
 app.use("/reviews", reviewRoutes);

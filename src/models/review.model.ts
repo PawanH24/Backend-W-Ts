@@ -1,32 +1,45 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-interface TReview {
-  booking_id: string;
-  user_id: string;
-  property_id: string;
-  host_id: string;
-  comment: string;
+export type TReviewDocument = {
+  property: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
+  booking: mongoose.Types.ObjectId;
   rating: number;
-  user_name: string;
-}
+  comment?: string;
+} & Document;
 
-const reviewSchema = new mongoose.Schema<TReview>({
-  booking_id: {
-    type: String,
-    required: true,
+const reviewSchema = new mongoose.Schema<TReviewDocument>(
+  {
+    property: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "property",
+      required: [true, "property is required"],
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: [true, "user is required"],
+    },
+    booking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "booking",
+      required: [true, "booking is required"],
+      unique: [true, "this booking has already been reviewed"],
+    },
+    rating: {
+      type: Number,
+      required: [true, "rating is required"],
+      min: [1, "rating must be at least 1"],
+      max: [5, "rating cannot exceed 5"],
+    },
+    comment: {
+      type: String,
+      trim: true,
+      maxLength: [500, "comment cannot exceed 500 characters"],
+    },
   },
-  user_id: {
-    type: String,
-    trim: true,
-  },
-  comment: {
-    type: String,
-    trim: true,
-  },
-  rating: {
-    type: Number,
-  },
-});
+  { timestamps: true },
+);
 
-const Review = mongoose.model<TReview>("review", reviewSchema);
+const Review = mongoose.model<TReviewDocument>("review", reviewSchema);
 export default Review;

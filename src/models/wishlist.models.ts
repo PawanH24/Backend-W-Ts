@@ -1,1 +1,0 @@
-//userValidator, propertyid

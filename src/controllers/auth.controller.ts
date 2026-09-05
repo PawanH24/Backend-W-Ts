@@ -182,8 +182,8 @@ export const updateProfile = catchAsync(async (req: Request, res: Response) => {
 // change password
 export const changePassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    //const {_id,email}=req.user
-    const { email, password, new_password } = req.body;
+    const { email } = req.user;
+    const { password, new_password } = req.body;
 
     if (!email) throw new AppError("email is required", 400);
     if (!password) throw new AppError("password is required", 400);
