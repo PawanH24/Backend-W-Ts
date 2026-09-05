@@ -1,0 +1,5 @@
+$kind: http-request
+name: createProperty
+url: http://localhost:8080/property
+method: POST
+order: 2985

@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/reviews/
+method: DELETE
+order: 4241726341496540

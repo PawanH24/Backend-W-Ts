@@ -5,6 +5,13 @@ import AppError from "../utils/appError.utils";
 import { sendResponse } from "../utils/sendResponse.utils";
 import { Role } from "../types/enum.types";
 import Property from "../models/property.model";
+import { sendEmail } from "../utils/sendEmail.utils";
+import {
+  generateAccountLoggedInHtml,
+  generateBookingCreatedHtml,
+  generateHostBookingNotificationHtml,
+} from "../utils/emailTemplate.utils";
+import User from "../models/user.model";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
@@ -94,6 +101,40 @@ export const create = catchAsync(async (req: Request, res: Response) => {
   await booking.populate("user", "fullName email phone profile_image");
   await booking.populate("host", "fullName email phone profile_image");
   await booking.populate("property", "name address main_image");
+
+  const guest = booking.user as any;
+
+  const host = booking.host as any;
+
+  Promise.all([
+    sendEmail({
+      to: guest.email,
+      subject: `Booking Confirmed - ${property.name}`,
+      html: generateBookingCreatedHtml({
+        guestName: guest.fullName,
+        propertyAddress: property.address,
+        propertyName: property.name,
+        bookingReference: booking.booking_reference,
+        checkIn: booking.check_in,
+        checkOut: booking.check_out,
+        totalPrice: booking.total_price,
+      }),
+    }),
+    sendEmail({
+      to: host.email,
+      subject: `New Booking Recieved - ${property.name}`,
+      html: generateHostBookingNotificationHtml({
+        hostName: host.fullName,
+        guestName: guest.fullName,
+        guestEmail: guest.email,
+        propertyName: property.name,
+        bookingReference: booking.booking_reference,
+        checkIn: booking.check_in,
+        checkOut: booking.check_out,
+        totalPrice: booking.total_price,
+      }),
+    }),
+  ]);
 
   sendResponse(res, {
     message: "Booking created successfully",

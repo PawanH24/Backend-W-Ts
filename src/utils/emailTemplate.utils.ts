@@ -288,3 +288,191 @@ export const generateAccountLoggedInHtml = ({
 
   return html;
 };
+
+export const generateBookingCreatedHtml = ({
+  guestName,
+  propertyName,
+  propertyAddress,
+  bookingReference,
+  checkIn,
+  checkOut,
+  totalPrice,
+}: {
+  guestName: string;
+  propertyName: string;
+  propertyAddress: {
+    country: string;
+    city: string;
+    street_name: string;
+    zipcode: string;
+  };
+  bookingReference: string;
+  checkIn: Date;
+  checkOut: Date;
+  totalPrice: number;
+}) => {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Booking Confirmed</title>
+</head>
+
+<body style="font-family:Arial,Helvetica,sans-serif;background:#f4f8fc;padding:20px;">
+  <table width="600" align="center" style="background:white;border-radius:12px;overflow:hidden;">
+    
+    <tr>
+      <td style="background:linear-gradient(135deg,#4DA6FF,#1E88E5);padding:30px;text-align:center;">
+        <h1 style="color:white;margin:0;">
+          Booking Confirmed 🎉
+        </h1>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:30px;">
+        <h2>Hello ${guestName},</h2>
+
+        <p>
+          Your booking has been successfully created.
+        </p>
+
+        <table width="100%" cellpadding="8">
+          <tr>
+            <td><strong>Booking Reference</strong></td>
+            <td>${bookingReference}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Property</strong></td>
+            <td>${propertyName}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Address</strong></td>
+             <td>
+              ${propertyAddress.street_name}, ${propertyAddress.city}, ${propertyAddress.zipcode}, ${propertyAddress.country}
+            </td>
+          </tr>
+
+          <tr>
+            <td><strong>Check In</strong></td>
+            <td>${formatDate(checkIn)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Check Out</strong></td>
+            <td>${formatDate(checkOut)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Total Price</strong></td>
+            <td>$${totalPrice}</td>
+          </tr>
+        </table>
+
+        <p>
+          Please keep your booking reference for future communication.
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
+};
+
+export const generateHostBookingNotificationHtml = ({
+  hostName,
+  guestName,
+  guestEmail,
+  propertyName,
+  bookingReference,
+  checkIn,
+  checkOut,
+  totalPrice,
+}: {
+  hostName: string;
+  guestName: string;
+  guestEmail: string;
+  propertyName: string;
+  bookingReference: string;
+  checkIn: Date;
+  checkOut: Date;
+  totalPrice: number;
+}) => {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>New Booking Received</title>
+</head>
+
+<body style="font-family:Arial,Helvetica,sans-serif;background:#f4f8fc;padding:20px;">
+  <table width="600" align="center" style="background:white;border-radius:12px;overflow:hidden;">
+    
+    <tr>
+      <td style="background:linear-gradient(135deg,#4DA6FF,#1E88E5);padding:30px;text-align:center;">
+        <h1 style="color:white;margin:0;">
+          New Booking Received 🏠
+        </h1>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:30px;">
+        <h2>Hello ${hostName},</h2>
+
+        <p>
+          A guest has booked your property.
+        </p>
+
+        <table width="100%" cellpadding="8">
+          <tr>
+            <td><strong>Booking Reference</strong></td>
+            <td>${bookingReference}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Property</strong></td>
+            <td>${propertyName}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Guest Name</strong></td>
+            <td>${guestName}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Guest Email</strong></td>
+            <td>${guestEmail}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Check In</strong></td>
+            <td>${formatDate(checkIn)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Check Out</strong></td>
+            <td>${formatDate(checkOut)}</td>
+          </tr>
+
+          <tr>
+            <td><strong>Total Booking Value</strong></td>
+            <td>$${totalPrice}</td>
+          </tr>
+        </table>
+
+        <p>
+          Please review this booking from your host dashboard.
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
+};
