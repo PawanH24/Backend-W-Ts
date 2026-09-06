@@ -14,6 +14,7 @@ const upload = uploader();
 
 route.get("/", authenticate([Role.ADMIN]), getAll);
 route.get("/:id", authenticate([Role.ADMIN]), getById);
+
 route.put(
   "/:id",
   upload.single("profile_image"),

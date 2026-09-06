@@ -476,3 +476,150 @@ export const generateHostBookingNotificationHtml = ({
 </html>
 `;
 };
+
+export const generateChangePasswordOtpHtml = ({
+  fullName,
+  otp,
+  expiresAt,
+}: {
+  fullName: string;
+  otp: string;
+  expiresAt: Date;
+}) => {
+  const formattedExpiry = formatDate(expiresAt);
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Password Reset OTP</title>
+</head>
+
+<body style="margin:0;padding:0;background:#f4f8fc;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding:40px 20px;">
+        <table
+          width="600"
+          cellpadding="0"
+          cellspacing="0"
+          style="
+            background:#ffffff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
+          "
+        >
+          <!-- Header -->
+          <tr>
+            <td
+              style="
+                background:linear-gradient(135deg,#4DA6FF,#1E88E5);
+                padding:30px;
+                text-align:center;
+              "
+            >
+              <h1 style="margin:0;color:#ffffff;font-size:28px;">
+                Password Reset Request 🔐
+              </h1>
+
+              <p style="margin-top:10px;color:#eaf4ff;font-size:16px;">
+                Use the verification code below to reset your password
+              </p>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding:35px;">
+              <h2 style="margin-top:0;color:#1E3A5F;">
+                Hello ${fullName},
+              </h2>
+
+              <p style="font-size:15px;line-height:1.7;color:#555;">
+                We received a request to reset the password for your account.
+                Use the OTP below to continue.
+              </p>
+
+              <div style="text-align:center;margin:35px 0;">
+                <div
+                  style="
+                    display:inline-block;
+                    background:#eef6ff;
+                    border:2px dashed #4DA6FF;
+                    border-radius:12px;
+                    padding:18px 40px;
+                    font-size:36px;
+                    font-weight:bold;
+                    letter-spacing:8px;
+                    color:#1E88E5;
+                  "
+                >
+                  ${otp}
+                </div>
+              </div>
+
+              <table
+                width="100%"
+                cellpadding="10"
+                cellspacing="0"
+                style="
+                  margin:25px 0;
+                  border:1px solid #d9e8ff;
+                  border-radius:8px;
+                  background:#f8fbff;
+                "
+              >
+                <tr>
+                  <td><strong>Expires At</strong></td>
+                  <td>${formattedExpiry}</td>
+                </tr>
+              </table>
+
+              <p style="font-size:15px;line-height:1.7;color:#555;">
+                Enter this code on the password reset page to verify your
+                identity.
+              </p>
+
+              <p
+                style="
+                  font-size:15px;
+                  line-height:1.7;
+                  color:#d32f2f;
+                  font-weight:bold;
+                "
+              >
+                Do not share this OTP with anyone. Our team will never ask for
+                your verification code.
+              </p>
+
+              <p style="font-size:14px;color:#777;">
+                If you did not request a password reset, you can safely ignore
+                this email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td
+              style="
+                background:#eef6ff;
+                padding:20px;
+                text-align:center;
+                color:#666;
+                font-size:13px;
+              "
+            >
+              © ${new Date().getFullYear()} Airbnb. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`;
+};

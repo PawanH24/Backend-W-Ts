@@ -40,3 +40,9 @@ export enum ImageType {
   PROPERTY_GALLERY = "property_gallery",
   USER_PROFILE = "user_profile",
 }
+
+export enum OtpAction {
+  CHANGE_PASSWORD = "change_passwaord",
+  FORGOT_PASSWORD = "forgot_password",
+  VERIFY_EMAIL = "verify_email",
+}

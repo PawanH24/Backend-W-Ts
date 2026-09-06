@@ -7,11 +7,9 @@ import { Role } from "../types/enum.types";
 import Property from "../models/property.model";
 import { sendEmail } from "../utils/sendEmail.utils";
 import {
-  generateAccountLoggedInHtml,
   generateBookingCreatedHtml,
   generateHostBookingNotificationHtml,
 } from "../utils/emailTemplate.utils";
-import User from "../models/user.model";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
