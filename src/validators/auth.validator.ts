@@ -29,9 +29,9 @@ export const registerValidator = z.object({
   }),
 });
 
-export const changePasswordValidator = z.object({
+export const verifyChangePasswordValidator = z.object({
   body: z.object({
-    email: z.email().trim(),
+    otp: z.string(),
     password: z.string(),
     new_password: z
       .string()

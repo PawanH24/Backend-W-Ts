@@ -2,15 +2,16 @@ import { Router } from "express";
 import {
   register,
   login,
-  changePassword,
   getProfile,
   updateProfile,
+  requestChangePasswordOtp,
+  verifyChangePassword,
 } from "../controllers/auth.controller";
 import { validate } from "../middlewares/validator.middleware";
 import {
   loginValidator,
   registerValidator,
-  changePasswordValidator,
+  verifyChangePasswordValidator,
 } from "../validators/auth.validator";
 import uploader from "../middlewares/upload.middleware";
 import { logout } from "../controllers/auth.controller";
@@ -29,9 +30,15 @@ router.post(
 router.post("/login", validate(loginValidator), login);
 
 router.post(
-  "/resetPassword",
-  validate(changePasswordValidator),
-  changePassword,
+  "/requestChangePasswordOtp",
+  authenticate(),
+  requestChangePasswordOtp,
+);
+router.post(
+  "/verifyChangePassword",
+  authenticate(),
+  validate(verifyChangePasswordValidator),
+  verifyChangePassword,
 );
 
 router.post("/logout", authenticate(), logout);

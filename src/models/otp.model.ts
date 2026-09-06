@@ -1,4 +1,4 @@
-import mongoose, { BooleanExpression, model } from "mongoose";
+import mongoose from "mongoose";
 import { OtpAction } from "../types/enum.types";
 
 interface TOtpDocument {

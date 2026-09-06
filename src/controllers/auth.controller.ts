@@ -226,15 +226,14 @@ export const changePassword = catchAsync(
 
 export const requestChangePasswordOtp = catchAsync(async (req, res) => {
   const id = req.user._id;
-  const OTP = await hashPassword(
-    crypto.randomBytes(3).toString("hex").toUpperCase(),
-  );
+  const OTP = crypto.randomBytes(3).toString("hex").toUpperCase();
+
   const user = await User.findOne({ _id: id });
   if (!user) throw new AppError("User not found", 404);
 
   const otp = await Otp.create({
     user: id,
-    otp: OTP,
+    otp: await hashPassword(OTP),
     action: "CHANGE_PASSWORD",
     expiresAt: Date.now() + 5 * 60 * 1000,
   });
@@ -254,7 +253,6 @@ export const requestChangePasswordOtp = catchAsync(async (req, res) => {
   sendResponse(res, {
     message: "OTP has been sent to your email",
     statusCode: 201,
-    data: otp,
   });
 });
 
@@ -270,8 +268,8 @@ export const verifyChangePassword = catchAsync(async (req, res) => {
 
   const user = await User.findOne({ _id: id }).select("password");
   if (!user) throw new AppError("User not found", 404);
-  if (!comparePassword(password, user.password))
-    throw new AppError("Password is incorrect", 404);
+  const isPasswordValid = await comparePassword(password, user.password);
+  if (!isPasswordValid) throw new AppError("Password is incorrect", 401);
 
   const otpVerification = await Otp.findOne({
     user: id,
@@ -282,8 +280,8 @@ export const verifyChangePassword = catchAsync(async (req, res) => {
   if (otpVerification.expiresAt.getTime() < Date.now())
     throw new AppError("OTP has expired", 404);
   user.password = await hashPassword(new_password);
-  user.save();
-  otpVerification.deleteOne();
+  await user.save();
+  await otpVerification.deleteOne();
 
   sendResponse(res, {
     message: "Password changed successfully",

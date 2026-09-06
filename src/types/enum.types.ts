@@ -42,7 +42,7 @@ export enum ImageType {
 }
 
 export enum OtpAction {
-  CHANGE_PASSWORD = "change_passwaord",
+  CHANGE_PASSWORD = "change_password",
   FORGOT_PASSWORD = "forgot_password",
   VERIFY_EMAIL = "verify_email",
 }
