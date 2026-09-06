@@ -11,7 +11,7 @@ import {
   uploadFileToCloudinary,
 } from "../utils/cloudinary.utils";
 import ENV_CONFIG from "../config/env.config";
-import { Role } from "../types/enum.types";
+import { OtpAction, Role } from "../types/enum.types";
 import { sendEmail } from "../utils/sendEmail.utils";
 import {
   generateAccountCreatedHtml,
@@ -234,7 +234,7 @@ export const requestChangePasswordOtp = catchAsync(async (req, res) => {
   const otp = await Otp.create({
     user: id,
     otp: await hashPassword(OTP),
-    action: "CHANGE_PASSWORD",
+    action: OtpAction.CHANGE_PASSWORD,
     expiresAt: Date.now() + 5 * 60 * 1000,
   });
 
@@ -273,12 +273,14 @@ export const verifyChangePassword = catchAsync(async (req, res) => {
 
   const otpVerification = await Otp.findOne({
     user: id,
-    action: "CHANGE_PASSWORD",
-    otp,
-  });
+    action: OtpAction.CHANGE_PASSWORD,
+  }).select("+otp");
+
   if (!otpVerification) throw new AppError("invalid OTP", 404);
   if (otpVerification.expiresAt.getTime() < Date.now())
     throw new AppError("OTP has expired", 404);
+  const isOtpValid = await comparePassword(otp, otpVerification.otp);
+  if (!isOtpValid) throw new AppError("Invalid OTP", 404);
   user.password = await hashPassword(new_password);
   await user.save();
   await otpVerification.deleteOne();
