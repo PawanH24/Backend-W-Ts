@@ -285,6 +285,12 @@ export const verifyChangePassword = catchAsync(async (req, res) => {
   await user.save();
   await otpVerification.deleteOne();
 
+  res.clearCookie("access_token", {
+    httpOnly: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+    secure: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+    sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "strict",
+  });
+
   sendResponse(res, {
     message: "Password changed successfully",
     statusCode: 200,
