@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { OtpAction } from "../types/enum.types";
 
-interface TOtpDocument {
+interface TOtpDocument extends Document {
   user: mongoose.Types.ObjectId;
   otp: string;
   action: string;

@@ -183,46 +183,46 @@ export const updateProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 // change password
-export const changePassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email } = req.user;
-    const { password, new_password } = req.body;
+// export const changePassword = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { email } = req.user;
+//     const { password, new_password } = req.body;
 
-    if (!email) throw new AppError("email is required", 400);
-    if (!password) throw new AppError("password is required", 400);
-    if (!new_password) throw new AppError("new password is required", 400);
-    if (password === new_password)
-      throw new AppError(
-        "New password must be different from current password",
-        400,
-      );
+//     if (!email) throw new AppError("email is required", 400);
+//     if (!password) throw new AppError("password is required", 400);
+//     if (!new_password) throw new AppError("new password is required", 400);
+//     if (password === new_password)
+//       throw new AppError(
+//         "New password must be different from current password",
+//         400,
+//       );
 
-    const user = await User.findOne({ email: email }).select("+password");
-    if (!user) throw new AppError("User not found", 404);
+//     const user = await User.findOne({ email: email }).select("+password");
+//     if (!user) throw new AppError("User not found", 404);
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new AppError("Password incorrect", 401);
-    user.password = await hashPassword(new_password);
-    await user.save();
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) throw new AppError("Password incorrect", 401);
+//     user.password = await hashPassword(new_password);
+//     await user.save();
 
-    const { password: _, ...userWithoutPassword } = user.toObject();
-    sendResponse(res, {
-      message: "Changed Password successfully",
-      statusCode: 200,
-      data: userWithoutPassword,
-    });
+//     const { password: _, ...userWithoutPassword } = user.toObject();
+//     sendResponse(res, {
+//       message: "Changed Password successfully",
+//       statusCode: 200,
+//       data: userWithoutPassword,
+//     });
 
-    //add a boolean where logout to be true so it loggs out after changing password
+//add a boolean where logout to be true so it loggs out after changing password
 
-    // res.status(201).json({
-    //   message: "New password added",
-    //   data: rest,
-    //   success: true,
-    //   status: "suc
-    // cess",
-    // });
-  },
-);
+// res.status(201).json({
+//   message: "New password added",
+//   data: rest,
+//   success: true,
+//   status: "suc
+// cess",
+// });
+//   },
+// );
 
 export const requestChangePasswordOtp = catchAsync(async (req, res) => {
   const id = req.user._id;
@@ -230,6 +230,19 @@ export const requestChangePasswordOtp = catchAsync(async (req, res) => {
 
   const user = await User.findOne({ _id: id });
   if (!user) throw new AppError("User not found", 404);
+
+  const hasOtp: any = await Otp.findOne({ user: id }).sort({ createdAt: -1 });
+  console.log(hasOtp);
+
+  if (hasOtp) {
+    const fivemin = 5 * 60 * 1000;
+    const timePassed = Date.now() - hasOtp.createdAt.getTime();
+
+    if (timePassed <= fivemin)
+      throw new AppError("OTP already created plese wait for 5 minutes", 404);
+  }
+
+  await hasOtp.deleteMany({ user: id });
 
   const otp = await Otp.create({
     user: id,
