@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export const connectDatabase = (DB_URI: string) =>
   mongoose
     .connect(DB_URI, {
-      //dbName: "JobSeeker",
+      dbName: "JobSeeker",
       autoCreate: true,
     })
     .then(() => {

@@ -32,12 +32,18 @@ export const registerValidator = z.object({
   }),
 });
 
-export const verifyChangePasswordValidator = z.object({
+export const verifyForgotPasswordValidator = z.object({
   body: z.object({
     otp: z.string().toUpperCase(),
-    password: z.string(),
+    email: z.string(),
     new_password: z
       .string()
       .min(6, "Password must contain atleast 6 characters"),
+  }),
+});
+
+export const requestForgotPasswordOtpValidator = z.object({
+  body: z.object({
+    email: z.string(),
   }),
 });

@@ -224,14 +224,16 @@ export const updateProfile = catchAsync(async (req: Request, res: Response) => {
 //   },
 // );
 
-export const requestChangePasswordOtp = catchAsync(async (req, res) => {
-  const id = req.user._id;
+export const requestForgotPasswordOtp = catchAsync(async (req, res) => {
+  const { email } = req.body;
   const OTP = crypto.randomBytes(3).toString("hex").toUpperCase();
 
-  const user = await User.findOne({ _id: id });
+  const user = await User.findOne({ email });
   if (!user) throw new AppError("User not found", 404);
 
-  const hasOtp: any = await Otp.findOne({ user: id }).sort({ createdAt: -1 });
+  const hasOtp: any = await Otp.findOne({ user: user._id }).sort({
+    createdAt: -1,
+  });
   console.log(hasOtp);
 
   if (hasOtp) {
@@ -242,19 +244,20 @@ export const requestChangePasswordOtp = catchAsync(async (req, res) => {
       throw new AppError("OTP already created plese wait for 5 minutes", 404);
   }
 
-  await hasOtp.deleteMany({ user: id });
+  await Otp.deleteMany({
+    user: user._id,
+    action: OtpAction.FORGOT_PASSWORD,
+  });
 
   const otp = await Otp.create({
-    user: id,
+    user: user._id,
     otp: await hashPassword(OTP),
-    action: OtpAction.CHANGE_PASSWORD,
+    action: OtpAction.FORGOT_PASSWORD,
     expiresAt: Date.now() + 5 * 60 * 1000,
   });
 
-  await otp.save();
-
   sendEmail({
-    to: user.email,
+    to: email,
     subject: "OTP for changing password",
     html: generateChangePasswordOtpHtml({
       fullName: user.fullName,
@@ -269,31 +272,23 @@ export const requestChangePasswordOtp = catchAsync(async (req, res) => {
   });
 });
 
-export const verifyChangePassword = catchAsync(async (req, res) => {
-  const { password, new_password, otp } = req.body;
-  const id = req.user._id;
+export const verifyForgotPassword = catchAsync(async (req, res) => {
+  const { email, new_password, otp } = req.body;
 
-  if (password === new_password)
-    throw new AppError(
-      "Password must be different from previous password.",
-      404,
-    );
-
-  const user = await User.findOne({ _id: id }).select("password");
+  const user = await User.findOne({ email });
   if (!user) throw new AppError("User not found", 404);
-  const isPasswordValid = await comparePassword(password, user.password);
-  if (!isPasswordValid) throw new AppError("Password is incorrect", 401);
 
   const otpVerification = await Otp.findOne({
-    user: id,
-    action: OtpAction.CHANGE_PASSWORD,
+    user: user._id,
+    action: OtpAction.FORGOT_PASSWORD,
   }).select("+otp");
-
   if (!otpVerification) throw new AppError("invalid OTP", 404);
   if (otpVerification.expiresAt.getTime() < Date.now())
     throw new AppError("OTP has expired", 404);
+
   const isOtpValid = await comparePassword(otp, otpVerification.otp);
   if (!isOtpValid) throw new AppError("Invalid OTP", 404);
+
   user.password = await hashPassword(new_password);
   await user.save();
   await otpVerification.deleteOne();

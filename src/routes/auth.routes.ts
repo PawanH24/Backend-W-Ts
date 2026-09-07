@@ -4,14 +4,15 @@ import {
   login,
   getProfile,
   updateProfile,
-  requestChangePasswordOtp,
-  verifyChangePassword,
+  requestForgotPasswordOtp,
+  verifyForgotPassword,
 } from "../controllers/auth.controller";
 import { validate } from "../middlewares/validator.middleware";
 import {
   loginValidator,
   registerValidator,
-  verifyChangePasswordValidator,
+  requestForgotPasswordOtpValidator,
+  verifyForgotPasswordValidator,
 } from "../validators/auth.validator";
 import uploader from "../middlewares/upload.middleware";
 import { logout } from "../controllers/auth.controller";
@@ -30,15 +31,14 @@ router.post(
 router.post("/login", validate(loginValidator), login);
 
 router.post(
-  "/requestChangePasswordOtp",
-  authenticate(),
-  requestChangePasswordOtp,
+  "/requestForgotPasswordOtp",
+  validate(requestForgotPasswordOtpValidator),
+  requestForgotPasswordOtp,
 );
 router.post(
-  "/verifyChangePassword",
-  authenticate(),
-  validate(verifyChangePasswordValidator),
-  verifyChangePassword,
+  "/verifyForgotPassword",
+  validate(verifyForgotPasswordValidator),
+  verifyForgotPassword,
 );
 
 router.post("/logout", authenticate(), logout);
