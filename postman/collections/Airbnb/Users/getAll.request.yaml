@@ -1,4 +1,17 @@
 $kind: http-request
-url: http://localhost:8080/users
+url: http://localhost:8080/users?name&role=USER&phone
 method: GET
+queryParams:
+  - key: name
+    value: null
+    disabled: false
+    description: ""
+  - key: role
+    value: USER
+    disabled: false
+    description: ""
+  - key: phone
+    value: null
+    disabled: false
+    description: ""
 order: 4000

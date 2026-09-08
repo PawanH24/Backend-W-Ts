@@ -222,7 +222,7 @@ export const requestForgotPasswordOtp = catchAsync(async (req, res) => {
   const hasOtp: any = await Otp.findOne({ user: user._id }).sort({
     createdAt: -1,
   });
-  console.log(hasOtp);
+  //console.log(hasOtp);
 
   if (hasOtp) {
     const fivemin = 5 * 60 * 1000;

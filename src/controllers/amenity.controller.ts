@@ -11,7 +11,11 @@ import { Role } from "../types/enum.types";
 const folder = "/amenities";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const amenity = await Amenity.find({});
+  const filter: any = {};
+  const { name } = req.query;
+  name && (filter.name = { $regex: name, $options: "i" });
+
+  const amenity = await Amenity.find(filter);
 
   sendResponse(res, {
     message: "Displaying all amenity",

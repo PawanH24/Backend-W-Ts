@@ -14,10 +14,20 @@ import {
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const filter: any = {};
-  const {} = req.query;
+  const { property_name } = req.query;
 
   if (user.role === Role.USER) filter.user = user;
   else if (user.role === Role.HOST) filter.host = user;
+
+  if (property_name) {
+    const properties = await Property.find({
+      name: { $regex: property_name as string, $options: "i" },
+    }).select("_id");
+
+    filter.property = { $in: properties.map((p) => p._id) };
+    //{[1,23,3]}
+    //{["name1","name2"]}
+  }
 
   const bookings = await Booking.find(filter)
     .populate("property", "name address main_image")
