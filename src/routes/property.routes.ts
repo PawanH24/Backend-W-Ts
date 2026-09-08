@@ -23,7 +23,7 @@ route.get("/", getAll);
 route.get("/host/all", authenticate([Role.HOST]), getByHost);
 route.get("/:id", getById);
 route.post(
-  "",
+  "/",
   authenticate([Role.HOST]),
   upload.fields([
     { name: "main_image", maxCount: 1 },

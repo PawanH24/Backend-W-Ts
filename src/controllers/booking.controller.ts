@@ -14,6 +14,7 @@ import {
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const filter: any = {};
+  const {} = req.query;
 
   if (user.role === Role.USER) filter.user = user;
   else if (user.role === Role.HOST) filter.host = user;

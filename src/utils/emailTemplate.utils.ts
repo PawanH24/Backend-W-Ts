@@ -477,7 +477,7 @@ export const generateHostBookingNotificationHtml = ({
 `;
 };
 
-export const generateChangePasswordOtpHtml = ({
+export const generateForgotPasswordOtpHtml = ({
   fullName,
   otp,
   expiresAt,

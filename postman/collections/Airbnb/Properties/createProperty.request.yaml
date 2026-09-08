@@ -1,5 +1,61 @@
 $kind: http-request
-name: createProperty
-url: http://localhost:8080/property
+url: http://localhost:8080/property/
 method: POST
-order: 2985
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: Banglow
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: 5 room balgow in seaside
+      description: ""
+      disabled: false
+    - type: text
+      key: amount
+      value: "450"
+      description: ""
+      disabled: false
+    - type: text
+      key: price_type
+      value: per_week
+      description: ""
+      disabled: false
+    - type: text
+      key: address
+      value: |-
+        {
+            "country": "United States",
+            "city": "Austin",
+            "street_name": "742 Evergreen Terrace",
+            "zipcode": "78701"
+          }
+      description: ""
+      disabled: false
+    - type: text
+      key: rooms
+      value: "5"
+      description: ""
+      disabled: false
+    - type: text
+      key: property_type
+      value: Banglow
+      description: ""
+      disabled: false
+    - type: file
+      key: main_image
+      src:
+        - /C:/Users/Pawan/Downloads/pool.jfif
+      description: ""
+      disabled: false
+    - type: file
+      key: gallery_images
+      src:
+        - /C:/Users/Pawan/Downloads/beachside2.jpg
+        - /C:/Users/Pawan/Downloads/beachside1.jpg
+      description: ""
+      disabled: false
+order: 1000

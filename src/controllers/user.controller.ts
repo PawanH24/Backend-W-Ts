@@ -3,7 +3,6 @@ import User from "../models/user.model.js";
 import { catchAsync } from "../utils/catchAsync.utils.js";
 import AppError from "../utils/appError.utils.js";
 import { sendResponse } from "../utils/sendResponse.utils.js";
-import { Role } from "../types/enum.types.js";
 import {
   deleteFileFromCloudinary,
   uploadFileToCloudinary,
@@ -12,10 +11,10 @@ import {
 const folder = "/profile-images";
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const filter: any = {};
-  const { role = Role.USER } = req.query;
-  if (role) {
-    filter.role = role;
-  }
+  const { role, name, phone } = req.query;
+  role && (filter.role = role);
+  name && (filter.name = { $regex: name, $options: "i" });
+  phone && (filter.phone = { $regex: phone, $options: "i" });
 
   const users = await User.find(filter).select("-password");
 

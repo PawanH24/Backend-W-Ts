@@ -12,12 +12,85 @@ import { Role } from "../types/enum.types.js";
 const folder = "/properties";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
-  const property = await Property.find({});
+  const filter: any = {};
+  const {
+    query,
+    minPrice,
+    maxPrice,
+    page = 1,
+    limit = 10,
+    price_type,
+    rooms,
+    property_type,
+    country,
+    city,
+    street_name,
+    zipcode,
+  } = req.query;
+  const perPage = Number(limit);
+  const currentPage = Number(page);
+  const skip = (currentPage - 1) * perPage;
+
+  if (query) {
+    filter.$or = [
+      {
+        name: {
+          $regex: query,
+          $options: "i",
+        },
+      },
+      {
+        description: {
+          $regex: query,
+          $options: "i",
+        },
+      },
+    ];
+  }
+  if (minPrice || maxPrice) {
+    const floor = Number(minPrice);
+    const ceil = Number(maxPrice);
+    if (floor) {
+      filter.amount = { $gte: floor };
+    }
+    if (ceil) {
+      filter.amount = { $lte: ceil };
+    }
+    if (floor && ceil) {
+      filter.amount = {
+        $lte: ceil,
+        $gte: floor,
+      };
+    }
+  }
+  price_type && (filter.price_type = price_type);
+  rooms && (filter.rooms = rooms);
+  property_type && (filter.property_type = property_type);
+  country && (filter["address.country"] = country);
+  city && (filter["address.city"] = city);
+  if (street_name) {
+    filter["address.street_name"] = { $regex: street_name, $options: "i" };
+  }
+  zipcode && (filter["address.zipcode"] = zipcode);
+
+  //name: ?=wifi
+  const property = await Property.find(filter).limit(perPage).skip(skip); //try this using only array functions
+  const total = await Property.countDocuments(filter);
+  const totalPage = Math.ceil(total / perPage);
+
+  const pagination = {
+    page: currentPage,
+    limit: perPage,
+    totalPage: totalPage,
+    total: total,
+    nextPage: currentPage < totalPage ? currentPage + 1 : null,
+    pevPage: currentPage > 1 ? currentPage - 1 : null,
+  };
 
   sendResponse(res, {
     message: "Displaying all properties",
     statusCode: 200,
-    data: property,
+    data: { property, pagination },
   });
 });
 

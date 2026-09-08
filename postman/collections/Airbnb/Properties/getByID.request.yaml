@@ -1,5 +1,25 @@
 $kind: http-request
-name: getByID
-url: http://localhost:8080/property/
+url: http://localhost:8080/property/?maxPrice=500&minPrice=50&page&limit
 method: GET
+queryParams:
+  - key: query
+    value: u
+    disabled: true
+    description: ""
+  - key: maxPrice
+    value: "500"
+    disabled: false
+    description: ""
+  - key: minPrice
+    value: "50"
+    disabled: false
+    description: ""
+  - key: page
+    value: null
+    disabled: false
+    description: ""
+  - key: limit
+    value: null
+    disabled: false
+    description: ""
 order: 3000
