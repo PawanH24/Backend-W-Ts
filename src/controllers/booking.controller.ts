@@ -17,7 +17,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   const { property_name } = req.query;
 
   if (user.role === Role.USER) filter.user = user;
-  else if (user.role === Role.HOST) filter.host = user;
+  // else if (user.role === Role.HOST) filter.host = user;
 
   if (property_name) {
     const properties = await Property.find({
