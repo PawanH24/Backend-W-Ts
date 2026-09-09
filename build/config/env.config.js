@@ -1,0 +1,39 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+// import * as z from "zod";
+//import "dotenv/config"
+const ENV_CONFIG = {
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: process.env.PORT,
+    DB_URI: process.env.DB_URI,
+    //jwt
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+    //cloudinary
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    //nodemailer
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_SERVICE: process.env.SMTP_SERVICE,
+    SMTP_PORT: Number(process.env.SMTP_PORT) ?? 465,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASS: process.env.SMTP_PASS,
+    SMTP_MAIL_FROM: process.env.SMTP_MAIL_FROM,
+};
+// const envSchema = z.object({
+//   NODE_ENV: z.enum(["development", "production", "test"]),
+//   PORT: z.coerce.number(),
+//   DB_URI: z.string().min(1),
+//   // jwt
+//   JWT_SECRET: z.string().min(1),
+//   JWT_EXPIRES_IN: z.string().min(1),
+// });
+// const ENV_CONFIG = envSchema.parse(process.env);
+exports.default = ENV_CONFIG;
+//# sourceMappingURL=env.config.js.map
