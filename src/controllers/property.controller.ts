@@ -25,6 +25,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     country,
     city,
     street_name,
+    host_id,
   } = req.query;
   const perPage = Number(limit);
   const currentPage = Number(page);
@@ -69,6 +70,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   city && (filter["address.city"] = city);
   street_name &&
     (filter["address.street_name"] = { $regex: street_name, $options: "i" });
+  host_id && (filter.host = host_id);
 
   //name: ?=wifi
   const property = await Property.find(filter).limit(perPage).skip(skip); //try this using only array functions

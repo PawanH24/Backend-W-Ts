@@ -6,56 +6,50 @@ body:
   content:
     - type: text
       key: name
-      value: Banglow
+      value: Mountain Villa
       description: ""
       disabled: false
     - type: text
       key: description
-      value: 5 room balgow in seaside
+      value: 7 room villa with mountain views
       description: ""
       disabled: false
     - type: text
       key: amount
-      value: "450"
+      value: "1800"
       description: ""
       disabled: false
     - type: text
       key: price_type
-      value: per_week
+      value: per_month
       description: ""
       disabled: false
     - type: text
       key: address
-      value: |-
-        {
-            "country": "United States",
-            "city": "Austin",
-            "street_name": "742 Evergreen Terrace",
-            "zipcode": "78701"
-          }
+      value: '{"country": "Switzerland","city": "Zurich","street_name": "Alpine Way 8","zipcode": "8001"}'
       description: ""
       disabled: false
     - type: text
       key: rooms
-      value: "5"
+      value: "7"
       description: ""
       disabled: false
     - type: text
       key: property_type
-      value: Banglow
+      value: Villa
       description: ""
       disabled: false
     - type: file
       key: main_image
       src:
-        - /C:/Users/Pawan/Downloads/pool.jfif
+        - /C:/Users/Pawan/Desktop/BRoadway/property photos/photo-1613490493576-7fde63acd811.jfif
       description: ""
       disabled: false
     - type: file
       key: gallery_images
       src:
-        - /C:/Users/Pawan/Downloads/beachside2.jpg
-        - /C:/Users/Pawan/Downloads/beachside1.jpg
+        - /C:/Users/Pawan/Desktop/BRoadway/property photos/photo-1600573472550-8090b5e0745e.jfif
+        - /C:/Users/Pawan/Desktop/BRoadway/property photos/photo-1600585154526-990dced4db0d.jfif
       description: ""
       disabled: false
 order: 1000

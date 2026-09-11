@@ -49,6 +49,7 @@ const uploader = () => {
     //check if file extension is allowed
     if (!allowed_exts.includes(path.extname(file.originalname).toLowerCase())) {
       cb(new AppError(`only ${allowed_exts.join(",")} type is allowed`, 422));
+      return;
     }
     //check if file mimetype is allowed
     if (!allowed_mime_types.includes(file.mimetype)) {

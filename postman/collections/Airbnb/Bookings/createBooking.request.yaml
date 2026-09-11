@@ -5,11 +5,11 @@ body:
   type: json
   content: "{\r
 
-    \    \"property_id\":\"6a97a4c92250c24e9b9bc793\",\r
+    \    \"property_id\":\"6aa12109480176ce2c37cc29\",\r
 
-    \    \"check_in\":\"2026-09-04\",\r
+    \    \"check_in\":\"2026-10-04\",\r
 
-    \    \"check_out\":\"2026-09-10\"\r
+    \    \"check_out\":\"2026-10-10\"\r
 
     \    }"
 order: 4409839001161638

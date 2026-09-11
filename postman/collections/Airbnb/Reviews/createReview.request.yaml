@@ -1,4 +1,16 @@
 $kind: http-request
-url: http://localhost:8080/reviews/
+url: http://localhost:8080/reviews/?
 method: POST
+queryParams:
+  - key: ""
+    value: null
+    disabled: false
+    description: ""
+body:
+  type: json
+  content: "{\r
+
+    \    \"property_id\":\"\", \"booking_id\":\"\", \"rating\":\"\", \"comment\":\"\"\r
+
+    }"
 order: 3877480111038933

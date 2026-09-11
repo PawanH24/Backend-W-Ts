@@ -5,7 +5,6 @@ const reviewSchema = z.object({
   property_id: z.string(),
   comment: z.string().trim().min(3),
   rating: z.number(),
-  user_name: z.string().trim(),
 });
 
 export const reviewValidator = z.object({

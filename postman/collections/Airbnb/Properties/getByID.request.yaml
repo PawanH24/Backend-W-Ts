@@ -1,5 +1,5 @@
 $kind: http-request
-url: http://localhost:8080/property/?maxPrice=500&minPrice=50&page&limit
+url: http://localhost:8080/property/
 method: GET
 queryParams:
   - key: query
@@ -8,18 +8,30 @@ queryParams:
     description: ""
   - key: maxPrice
     value: "500"
-    disabled: false
+    disabled: true
     description: ""
   - key: minPrice
     value: "50"
-    disabled: false
+    disabled: true
     description: ""
   - key: page
-    value: null
-    disabled: false
+    value: "1"
+    disabled: true
     description: ""
   - key: limit
-    value: null
-    disabled: false
+    value: "2"
+    disabled: true
+    description: ""
+  - key: price_type
+    value: per_week
+    disabled: true
+    description: ""
+  - key: country
+    value: United State
+    disabled: true
+    description: ""
+  - key: host_id
+    value: 6aa03ca3680987543fb2f0c4
+    disabled: true
     description: ""
 order: 3000

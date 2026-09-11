@@ -10,11 +10,23 @@ import {
   generateBookingCreatedHtml,
   generateHostBookingNotificationHtml,
 } from "../utils/emailTemplate.utils";
+import User from "../models/user.model";
 
 export const getAll = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const filter: any = {};
-  const { property_name } = req.query;
+  const {
+    property_name,
+    guest_name,
+    payment_status,
+    check_in,
+    check_out,
+    page = 1,
+    limit = 10,
+  } = req.query;
+  const perPage = Number(limit);
+  const currentPage = Number(page);
+  const skip = (currentPage - 1) * perPage;
 
   if (user.role === Role.USER) filter.user = user;
   // else if (user.role === Role.HOST) filter.host = user;
@@ -25,18 +37,42 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
     }).select("_id");
 
     filter.property = { $in: properties.map((p) => p._id) };
-    //{[1,23,3]}
-    //{["name1","name2"]}
   }
+  if (guest_name) {
+    const matchingUsers = await User.find({
+      fullName: { $regex: guest_name as string, $options: "i" },
+    }).select("_id");
+    filter.user = { $in: matchingUsers.map((u) => u._id) };
+  }
+  if (payment_status !== undefined) {
+    filter.payment_status = payment_status === "true";
+  }
+
+  if (check_in) filter.check_in = { $gte: new Date(check_in as string) };
+  if (check_out) filter.check_out = { $lte: new Date(check_out as string) };
 
   const bookings = await Booking.find(filter)
     .populate("property", "name address main_image")
-    .populate("user", "fullName email phone profile_image");
+    .populate("user", "fullName email phone profile_image")
+    .limit(perPage)
+    .skip(skip);
+
+  const total = await Booking.countDocuments(filter);
+  const totalPage = Math.ceil(total / perPage);
+
+  const pagination = {
+    page: currentPage,
+    limit: perPage,
+    totalPage: totalPage,
+    total: total,
+    nextPage: currentPage < totalPage ? currentPage + 1 : null,
+    pevPage: currentPage > 1 ? currentPage - 1 : null,
+  };
 
   sendResponse(res, {
     message: "Displaying all bookings",
     statusCode: 200,
-    data: bookings,
+    data: { bookings, pagination },
   });
 });
 
