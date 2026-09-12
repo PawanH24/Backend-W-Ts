@@ -24,6 +24,11 @@ const ENV_CONFIG = {
   SMTP_USER: process.env.SMTP_USER!!,
   SMTP_PASS: process.env.SMTP_PASS!!,
   SMTP_MAIL_FROM: process.env.SMTP_MAIL_FROM!!,
+
+  //stripe
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY!!,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET!!,
+  CLIENT_URL: process.env.CLIENT_URL!!,
 };
 
 // const envSchema = z.object({

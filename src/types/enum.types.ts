@@ -46,3 +46,9 @@ export enum OtpAction {
   FORGOT_PASSWORD = "forgot_password",
   VERIFY_EMAIL = "verify_email",
 }
+
+export enum PaymentStatus {
+  PENDING = "PENDING",
+  SUCCESS = "SUCCESS",
+  FAILED = "FAILED",
+}
