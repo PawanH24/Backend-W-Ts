@@ -1,4 +1,12 @@
 $kind: http-request
-url: http://localhost:8080/property/
+url: http://localhost:8080/amenity/6aaa8d203531ca7f52f932c7
 method: PUT
+body:
+  type: formdata
+  content:
+    - type: text
+      key: name
+      value: fiwi
+      description: ""
+      disabled: false
 order: 4503559596044864

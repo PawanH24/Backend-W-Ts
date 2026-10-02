@@ -10,6 +10,7 @@ import paymentRoutes from "./routes/payment.routes.js";
 import { connectDatabase } from "./config/db.config.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import ENV_CONFIG from "./config/env.config.js";
 import { verifySmtpServer } from "./config/nodemailer.config.js";
@@ -19,6 +20,7 @@ const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
 
 const app = express();
+app.use(cors({ origin: "*" }));
 app.use(cookieParser());
 app.post(
   "/payment/webhook",
