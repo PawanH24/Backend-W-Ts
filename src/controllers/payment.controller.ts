@@ -110,9 +110,10 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
     if (bookingId) {
       await Booking.findByIdAndUpdate(bookingId, { payment_status: true });
     }
+    return res.json({ received: true });
   }
 
-  res.json({ received: true });
+  return res.json({ received: true });
 };
 
 export const getMyPayments = catchAsync(async (req: Request, res: Response) => {
