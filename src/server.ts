@@ -20,7 +20,16 @@ const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
 
 const app = express();
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://airbnb-clone-m981.onrender.com",
+      "https://airbnb-cs-three.vercel.app",
+    ],
+    credentials: true,
+  }),
+);
 app.use(cookieParser());
 app.post(
   "/payment/webhook",

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import imageSchema from "../models/image.model";
 import { TImage } from "../types/global.types";
-import { TUserDocument } from "./user.model";
+//import { TUserDocument } from "./user.model";
 
 interface TAmenities {
   name: string;
   description: string;
   icon: TImage;
-  user: TUserDocument;
+  // user: TUserDocument;
 }
 
 const amenitiesSchema = new mongoose.Schema<TAmenities>(
@@ -34,11 +34,11 @@ const amenitiesSchema = new mongoose.Schema<TAmenities>(
       _id: false,
       required: true,
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: [true, "user is required"],
-      ref: "user",
-    },
+    // user: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   required: [true, "user is required"],
+    //   ref: "user",
+    // },
   },
   { timestamps: true },
 );

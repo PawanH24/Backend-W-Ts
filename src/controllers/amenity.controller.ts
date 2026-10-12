@@ -73,8 +73,8 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   if (!amenity) throw new AppError("Amenity not found", 404, "NOT FOUND");
 
   //only admin and owner can update
-  if (user.role !== Role.ADMIN && !amenity.user._id.equals(user._id)) {
-    throw new AppError("Only admin or owner can update this resource", 400);
+  if (user.role !== Role.ADMIN) {
+    throw new AppError("Only admin can update this resource", 400);
   }
 
   if (!amenity) {
@@ -108,11 +108,8 @@ export const remove = catchAsync(async (req: Request, res: Response) => {
     throw new AppError("Amenity not found", 404, "NOT FOUND");
   }
 
-  if (
-    user.role !== Role.ADMIN &&
-    amenity.user._id.toString() !== user._id.toString()
-  ) {
-    throw new AppError("Only admin or owner can update this resource", 400);
+  if (user.role !== Role.ADMIN) {
+    throw new AppError("Only admin can update this resource", 400);
   }
 
   await deleteFileFromCloudinary(amenity.icon.public_id);

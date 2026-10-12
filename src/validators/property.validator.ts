@@ -23,6 +23,10 @@ const propertyBodySchema = z.object({
   }),
   address: addressSchema,
   rooms: z.coerce.number(),
+  amenities: z
+    .string()
+    .transform((val) => val.split(",").map((item) => item.trim()))
+    .pipe(z.array(z.string().min(1))),
 });
 
 export const propertyValidator = z.object({

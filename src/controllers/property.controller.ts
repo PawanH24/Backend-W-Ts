@@ -73,7 +73,10 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
   host_id && (filter.host = host_id);
 
   //name: ?=wifi
-  const property = await Property.find(filter).limit(perPage).skip(skip); //try this using only array functions
+  const property = await Property.find(filter)
+    .populate("amenities")
+    .limit(perPage)
+    .skip(skip); //try this using only array functions
   const total = await Property.countDocuments(filter);
   const totalPage = Math.ceil(total / perPage);
 
@@ -95,7 +98,7 @@ export const getAll = catchAsync(async (req: Request, res: Response) => {
 
 export const getByHost = catchAsync(async (req: Request, res: Response) => {
   const user = req.user._id;
-  const property = await Property.find({ host: user });
+  const property = await Property.find({ host: user }).populate("amenities");
 
   sendResponse(res, {
     message: "Displaying all properties",
@@ -107,7 +110,7 @@ export const getByHost = catchAsync(async (req: Request, res: Response) => {
 export const getById = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const property = await Property.findById(id);
+  const property = await Property.findById(id).populate("amenities");
 
   if (!property) {
     throw new AppError("Property not found", 404);
@@ -134,6 +137,8 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     rooms,
     property_type,
   } = req.body;
+  const amenities = JSON.parse(req.body.amenities);
+  console.log(amenities);
   const { _id } = req.user;
 
   if (!main_image[0]) throw new AppError("Main image is required", 400);
@@ -150,6 +155,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     rooms,
     property_type,
     host: _id,
+    amenities,
   });
 
   const { path, public_id } = await uploadFileToCloudinary(
@@ -191,6 +197,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     address,
     rooms,
     property_type,
+    amenities,
   } = req.body;
   const user = req.user;
   const { main_image, gallery_images } = req.files as {
@@ -212,6 +219,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   if (address) property.address = address;
   if (rooms) property.rooms = rooms;
   if (property_type) property.property_type = property_type;
+  if (amenities) property.amenities = amenities;
 
   if (main_image?.[0]) {
     const { path, public_id } = await uploadFileToCloudinary(

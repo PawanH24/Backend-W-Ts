@@ -19,12 +19,12 @@ route.get("/", authenticate([Role.HOST, Role.ADMIN]), getAll);
 route.get("/:id", authenticate([Role.HOST, Role.ADMIN]), getById);
 route.post(
   "/",
-  authenticate([Role.HOST]),
+  authenticate([Role.ADMIN]),
   upload.single("icon"),
   validate(amenityValidator),
   create,
 );
-route.put("/:id", authenticate([Role.HOST]), upload.single("icon"), update);
-route.delete("/:id", authenticate([Role.HOST, Role.ADMIN]), remove);
+route.put("/:id", authenticate([Role.ADMIN]), upload.single("icon"), update);
+route.delete("/:id", authenticate([Role.ADMIN]), remove);
 
 export default route;

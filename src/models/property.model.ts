@@ -19,6 +19,7 @@ interface TProperty extends Document {
   property_type: PropertyType;
   main_image: TImage;
   gallery_images: TImage[];
+  amenities: mongoose.Types.ObjectId[];
 }
 
 const propertySchema = new mongoose.Schema<TProperty>({
@@ -71,6 +72,12 @@ const propertySchema = new mongoose.Schema<TProperty>({
     type: [imageSchema],
     required: [true, "image is required"],
   },
+  amenities: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Amenities",
+    },
+  ],
 });
 
 const Property = mongoose.model<TProperty>("property", propertySchema);
