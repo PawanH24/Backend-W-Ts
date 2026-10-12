@@ -107,11 +107,10 @@ export const login = catchAsync(
 
     //cookie
     res.cookie("access_token", access_token, {
-      httpOnly: true,
-      secure: ENV_CONFIG.NODE_ENV === "development",
+      httpOnly: ENV_CONFIG.NODE_ENV === "development" ? false : true,
+      secure: ENV_CONFIG.NODE_ENV === "development" ? false : true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "none",
-      path: "/",
+      sameSite: ENV_CONFIG.NODE_ENV === "development" ? "lax" : "strict",
     });
 
     sendEmail({

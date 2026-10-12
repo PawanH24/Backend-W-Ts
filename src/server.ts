@@ -18,7 +18,7 @@ import { handleStripeWebhook } from "./controllers/payment.controller.js";
 
 const PORT = ENV_CONFIG.PORT;
 const DB_URI = ENV_CONFIG.DB_URI;
-//test123
+
 const app = express();
 app.use(
   cors({
